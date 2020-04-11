@@ -1,0 +1,66 @@
+#+TITLE: Development for KanripoX
+#+AUTHOR: Christian Wittern
+#+DATE: 2020-04-11
+
+* Overview
+
+  KanripoX is the next generation format for the Kanseki Repository.
+  It combines the previous experiences with various encoding
+  standards, text collections, philological methods and user
+  requirements into a collection of texts, related data and tools.
+  
+  It thus draws freely from existing material, where possible
+  acknowledging the debt.  Apologies in advance if this at times has
+  not been actualized, any oversight is not intentional.
+
+* Layout
+
+  Individual texts have all information bundled in a repository, just
+  as in the Kanseki repository.  All versions and all related
+  information is in the same branch, thus always visible and
+  accessable (at least in theory, but maybe not in practice, as the
+  information might reside somewhere else and/or has usage
+  restrictions).  The specifics are quite variable and detailed in the
+  =Manifext.xml=, which is one of the required files.
+
+** Textual sources
+
+   Textual sources are treated slightly different depending on their
+   status as *documentary* or *interpretative*. Apart from that, they are 
+
+   Q: How and where to indicate language?
+
+*** Documentary files (=doc=)
+
+    Documentary files document a specific edition, usually a print
+    edition. It can exist as a transcription, a digital facsimile or a
+    combination of both.  The XML files for this are prepared
+    according to the TEI Guidelines. Text content is distributed
+    across several XML files, usually one file for a smaller unit of
+    the text, such as a /juan/ or /booklet/, in the same way this is
+    done in the Mandoku format of the Kanseki Repository.  These files
+    are put into subfolders according to the edition they belong to, a
+    parent XML files includes all of them into one virtual document
+    (using XInclude).
+
+*** Interpretative files (=int=)
+
+    Versions of the text that are not intended to directly replicate
+    an existing version, but rather derive from such a version, for
+    example by normalizing character representation, translation
+    (published translations that are reproduced should go into the
+    documentary section), punctuation etc.
+
+*** Commentaries (=com=)
+
+    Other derived texts, summaries etc. will go here. 
+
+** Auxiliary files (=aux=)
+
+   These are files that are required or useful for making use of the
+   the text files.  They include machine readable lists of text
+   tokens, link lists that are used to align the various versions of a
+   text and other types of annotations, some might be algorithmically
+   derived from the texts, others hand-crafted.
+   
+
