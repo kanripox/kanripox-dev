@@ -28,20 +28,32 @@
    Textual sources are treated slightly different depending on their
    status as *documentary* or *interpretative*. Apart from that, they are 
 
+   Text content is distributed across several XML files, usually one
+    file for a smaller unit of the text, such as a /juan/ or
+    /booklet/, in the same way this is done in the Mandoku format of
+    the Kanseki Repository. These files are put into subfolders
+    according to the edition they belong to, a parent XML files
+    includes all of them into one virtual document (using XInclude).
+    -> for other files use alignment table that indicates were to
+    split.
+
+
    Q: How and where to indicate language?
+      - Literary Chinese = lzh
+
+    Machine readable identifiers for the text should be derived from
+    their status and editions, eg. KR3a0007_SBCK, KR3a0007_tls-en ->
+    Edition labels (SBCK, master, tls-en) can not include "_" and need
+    to be unique across all files. Identifiers within the text can be
+    unique to that text only.
+    
 
 *** Documentary files (=doc=)
 
     Documentary files document a specific edition, usually a print
     edition. It can exist as a transcription, a digital facsimile or a
     combination of both.  The XML files for this are prepared
-    according to the TEI Guidelines. Text content is distributed
-    across several XML files, usually one file for a smaller unit of
-    the text, such as a /juan/ or /booklet/, in the same way this is
-    done in the Mandoku format of the Kanseki Repository.  These files
-    are put into subfolders according to the edition they belong to, a
-    parent XML files includes all of them into one virtual document
-    (using XInclude).
+    according to the TEI Guidelines. 
 
 *** Interpretative files (=int=)
 
@@ -62,5 +74,28 @@
    tokens, link lists that are used to align the various versions of a
    text and other types of annotations, some might be algorithmically
    derived from the texts, others hand-crafted.
-   
 
+*** Link Lists (=lnk=)
+
+    Various types:
+    - corresponding sections of text
+      - within this text, but also with other texts
+    - link text to commentary
+    - link text to translation
+    - logical structure
+    - virtual anthology, excerpts
+    - 
+   
+*** Syntactic Word Locations (=swl=)
+
+    Annotations from the TLS project
+
+*** Collatex tokens (=tok=)
+
+    Tokenized versions of the XML files, in a format suitable to be
+    fed to CollateX.  These are required to produce the link lists.
+
+
+* Ideas 
+
+  - mark one edition as "pivot", this will be the one with segments marked.
