@@ -99,3 +99,11 @@
 * Ideas 
 
   - mark one edition as "pivot", this will be the one with segments marked.
+
+* Alignment tables:
+For every file, we will produce a file that contains the token alignments for all the other files, based on the ID unit of the file, this will currently either be <line> or <seq>
+#+begin_example
+<seg id="CH1a0907_CHANT_001-1a.2" tp=" tcount="4">
+<link corresp="#" tp="10"
+</seq>
+#+end_example
