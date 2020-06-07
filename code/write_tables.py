@@ -57,10 +57,11 @@ def write_table(tseq, textdir, src=0):
         lid=""
         ldic=[]
         trg = mq[mt][0]
+        ed="%s" % (tf[trg])
         for tag, i1, i2, j1, j2 in mq[mt][1]:
             if tag in ['insert']:
                 for l in range(j1, j2):
-                    ldic.append((tag, ('i', 'i'), tseq[trg][l]))
+                    ldic.append((tag, ('i', 'i'), tseq[trg][l], ed))
             elif tag in ['delete']:
                 for l in range(i1, i2):
                     sid = tseq[src][l][1]
@@ -68,7 +69,7 @@ def write_table(tseq, textdir, src=0):
                         sdic.append(ldic)
                         ldic = []
                         lid = sid
-                    ldic.append((tag, tseq[src][l], ('d', 'd')))
+                    ldic.append((tag, tseq[src][l], ('d', 'd'), ed))
             elif tag in ['equal', 'replace']:
                 dx= j1 - i1
                 for l in range(i1, i2):
@@ -82,7 +83,7 @@ def write_table(tseq, textdir, src=0):
                         ldic = []
                         lid = sid
                     try:
-                        ldic.append ((tag, tseq[src][l], tseq[trg][l+dx]))
+                        ldic.append ((tag, tseq[src][l], tseq[trg][l+dx], ed))
                     except:
                         print("error,", tag, src, l, trg, l+dx)
                         
@@ -92,6 +93,7 @@ def write_table(tseq, textdir, src=0):
             try:
                 ix=a[0][1][1]
                 tx=a[1][2][1]
+                ed=a[0][3]
             except:
                 continue
             try:
@@ -104,8 +106,13 @@ def write_table(tseq, textdir, src=0):
                 ttp=0
             icount = len([x for x in a if x[0] == 'insert'])
             dcount = len([x for x in a if x[0] == 'delete'])
+            df = max(dcount, icount)
+            if (df > 0):
+                diff = " diff='%d'" % (df)
+            else:
+                diff = ""
             key="<seg id='%s' tp='%d' tcount='%d'>\n" % (ix, itp, len(a) - icount)
-            val="<ref ed='%s' corresp='#%s' tp='%d' tcount='%d'/>\n" % (tf[trg], tx, ttp, len(a) - dcount)
+            val="<ref ed='%s' corresp='#%s' tp='%d' tcount='%d'%s/>\n" % (ed, tx, ttp, len(a) - dcount, diff)
             tdic[key].append(val)
     lnkd="%s/aux/lnk"%(textdir)
     os.makedirs(lnkd, exist_ok=True)
