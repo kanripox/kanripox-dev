@@ -13,7 +13,7 @@
   acknowledging the debt.  Apologies in advance if this at times has
   not been actualized, any oversight is not intentional.
 
-* Layout
+* Anatomy of a text repository
 
   Individual texts have all information bundled in a repository, just
   as in the Kanseki repository.  All versions and all related
