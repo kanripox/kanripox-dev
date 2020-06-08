@@ -42,7 +42,7 @@ def align_tokens(tseq, textid):
         if s1 != textid:
             sq.set_seq2([a[0] for a in tseq[s1]])
             o=sq.get_opcodes()
-            mq.append((textid, o))
+            mq.append((s1, o))
     return mq
 
 
@@ -112,7 +112,10 @@ def write_table(tseq, textdir, textid):
             else:
                 diff = ""
             key="<seg id='%s' tp='%d' tcount='%d'>\n" % (ix, itp-1, len(a) - icount)
-            val="<ref ed='%s' corresp='#%s' tp='%d' tcount='%d'%s/>\n" % (ed, tx, ttp-2, len(a) - dcount, diff)
+            if tx == 'd':
+                val="<ref ed='%s' corresp='#%s_%s' tp='%d' tcount='%d'%s/>\n" % (ed, ed, tx, ttp, len(a) - dcount, diff)
+            else:
+                val="<ref ed='%s' corresp='#%s' tp='%d' tcount='%d'%s/>\n" % (ed, tx, ttp-2, len(a) - dcount, diff)
             tdic[key].append(val)
     lnkd="%s/aux/lnk"%(textdir)
     os.makedirs(lnkd, exist_ok=True)
