@@ -132,9 +132,43 @@ def write_table(tseq, textdir, textid):
         of.write("</seg>\n")
     of.write("</div>\n")
     of.close()
-#    break
 
 
+def read_align_tabs(textdir):
+    lnkd = "%s/aux/lnk" % (textdir)
+    at=[a for a in os.listdir(lnkd) if a.endswith(".xml")]
+    segs = defaultdict(list)
+    for atb in at:
+        tree = ET.parse("%s/%s" % (lnkd, atb))
+        root = tree.getroot()
+        for seg in root:
+            segid=seg.attrib['id']
+            tp=seg.attrib['tp']
+            tcount=seg.attrib['tcount']
+            segs[segid].append((segid, int(tp), int(tcount)))
+            for ref in seg:
+                segs[segid].append((ref.attrib['corresp'][1:], int(ref.attrib['tp']), int(ref.attrib['tcount'])))
+    return segs
+
+def get_alignments(ttok, s):
+    "Get the alignments for a segment; ttok is the token table."
+    tk = []
+    for seg in s:
+        idx = "_".join(seg[0].split("_")[0:2])
+        if not idx in ttok:
+            idx=seg[0].split("_")[0]
+        tp=seg[1]
+        tcount = seg[2]
+        toks = ttok[idx][tp:tp+tcount]
+        if len(toks) < 1:
+            toks = [('', idx, 0)]
+        tl = []
+        for t in toks:
+            tl.append({"t" : t[0], 'id' : t[1], 'tp' : t[2]})
+
+        tk.append({'id': idx, 'tokens' : tl})
+    #break
+    return {'witnesses' : tk}
 if __name__ == '__main__':
     tdir = sys.argv[1]
     tr = read_tokens(tdir)

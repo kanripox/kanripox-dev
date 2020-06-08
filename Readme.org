@@ -37,9 +37,9 @@
     -> for other files use alignment table that indicates were to
     split.
 
-
-   Q: How and where to indicate language?
-      - Literary Chinese = lzh
+    The language of the texts in the Kanseki Repository in general will be
+    "Literary Chinese", for which the ISO 639-3 language code is lzh. For other
+    languages, the identifiers should be used as fitting.
 
     Machine readable identifiers for the text should be derived from
     their status and editions, eg. KR3a0007_SBCK, KR3a0007_tls-en ->
@@ -50,17 +50,16 @@
 
 *** Documentary files (=doc=)
 
-    Documentary files document a specific edition, usually a print
-    edition. It can exist as a transcription, a digital facsimile or a
-    combination of both.  The XML files for this are prepared
-    according to the TEI Guidelines. 
+    Documentary files document a specific edition, usually a print edition. It
+    can exist as a transcription, a digital facsimile or a combination of both.
+    The XML files for this are prepared according to the TEI Guidelines.
 
 *** Interpretative files (=int=)
 
-    Versions of the text that are not intended to directly replicate
-    an existing version, but rather derive from such a version, for
-    example by normalizing character representation, translation
-    (published translations that are reproduced should go into the
+    Versions of the text that are not intended to directly replicate an existing
+    version, but rather derive from such a version, for example by normalizing
+    character representation, translation (published translations that are
+    reproduced as such, without editorial intervention, should go into the
     documentary section), punctuation etc.
 
 *** Commentaries (=com=)
@@ -84,26 +83,55 @@
     - link text to translation
     - logical structure
     - virtual anthology, excerpts
-    - 
    
+**** Alignment tables:
+For every file, we will produce a file that contains the token alignments for
+all the other files, based on the ID unit of the file, this will currently
+either be <line> or <seq>, while alignments on larger units like paragraphs do
+not work very well.
+#+begin_example language=xml
+<seg id='CH1a0907_CHANT_001-4a.34' tp='462' tcount='5'>
+<ref ed='KR3a0007_SBCK' corresp='#KR3a0007_SBCK_001-2b.08' tp='1157' tcount='4' diff='1'/>
+<ref ed='KR3a0007_WYG' corresp='#KR3a0007_WYG_001-2b.03' tp='1498' tcount='4' diff='1'/>
+<ref ed='KR3a0007_master' corresp='#KR3a0007_master_001' tp='1157' tcount='4' diff='1'/>
+</seg>
+<seg id='CH1a0907_CHANT_001-4a.35' tp='467' tcount='2'>
+<ref ed='KR3a0007_SBCK' corresp='#KR3a0007_SBCK_d' tp='0' tcount='0' diff='2'/>
+<ref ed='KR3a0007_WYG' corresp='#KR3a0007_WYG_d' tp='0' tcount='0' diff='2'/>
+<ref ed='KR3a0007_master' corresp='#KR3a0007_master_d' tp='0' tcount='0' diff='2'/>
+</seg>
+<seg id='CH1a0907_CHANT_001-4a.36' tp='469' tcount='9'>
+<ref ed='KR3a0007_SBCK' corresp='#KR3a0007_SBCK_001-2b.09' tp='1161' tcount='8' diff='1'/>
+<ref ed='KR3a0007_WYG' corresp='#KR3a0007_WYG_001-2b.03' tp='1502' tcount='8' diff='1'/>
+<ref ed='KR3a0007_master' corresp='#KR3a0007_master_001' tp='1161' tcount='8' diff='1'/>
+</seg>
+#+end_example
+
+In the second example, the corresponding segment in the other texts is
+completely missing, therefore there is no link possible to a corresponding
+section in these texts. For the sake of processing with collatex, we introduce a
+dummy ID here, identified with 'd' (for deleted) in place of the text location.
+
 *** Syntactic Word Locations (=swl=)
 
-    Annotations from the TLS project
+Annotations from the TLS project, according to the format used there.
 
 *** Collatex tokens (=tok=)
 
-    Tokenized versions of the XML files, in a format suitable to be
-    fed to CollateX.  These are required to produce the link lists.
+Tokenized versions of the XML files, in a format suitable to be fed to CollateX.
+These are required to produce the alignment tables.
+#+begin_example lang=xml
+<div>[...]
+   <t tp="468" id="CH1a0907_CHANT_001-4a.35" el="p seg" pos="1">言</t>
+   <t tp="469"
+      f="，"
+      id="CH1a0907_CHANT_001-4a.35"
+      el="p seg"
+      pos="2">行</t>
+[...]
+</div>
+#+end_example
 
-
-* Ideas 
+* Ideas
 
   - mark one edition as "pivot", this will be the one with segments marked.
-
-* Alignment tables:
-For every file, we will produce a file that contains the token alignments for all the other files, based on the ID unit of the file, this will currently either be <line> or <seq>
-#+begin_example
-<seg id="CH1a0907_CHANT_001-1a.2" tp=" tcount="4">
-<link corresp="#" tp="10"
-</seq>
-#+end_example
