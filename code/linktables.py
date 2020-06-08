@@ -11,7 +11,7 @@ def read_tokens(textdir):
     tf=[a.replace("-log.xml", "") for a in os.listdir(tokd) if a.endswith("log.xml")]
     tf.sort()
     # the sequences for every file will be stored here
-    tseq = []
+    tseq = {}
     for t in tf:
         textid = t
         target = [a for a in os.listdir(tokd) if a.startswith("%s-tok" % (textid))]
@@ -27,65 +27,65 @@ def read_tokens(textdir):
                 else:
                     ix = "no_id"
                 t1.append((child.text, ix, int(child.attrib['tp']), child.attrib['pos'] ))
-        tseq.append(t1)
+        tseq[textid] = t1
     return tseq
 
 
 # In[5]:
 
 
-def align_tokens(tseq, m=0):
+def align_tokens(tseq, textid):
     mq=[]
     sq=SequenceMatcher()
-    sq.set_seq1([a[0] for a in tseq[m]])
-    for i, s1 in enumerate(tseq):
-        if i != m:
-            sq.set_seq2([a[0] for a in tseq[i]])
+    sq.set_seq1([a[0] for a in tseq[textid]])
+    for s1 in tseq:
+        if s1 != textid:
+            sq.set_seq2([a[0] for a in tseq[s1]])
             o=sq.get_opcodes()
-            mq.append((i, o))
+            mq.append((textid, o))
     return mq
 
 
-def write_table(tseq, textdir, src=0):
+def write_table(tseq, textdir, textid):
     tokd="%s/aux/tok"%(textdir)
     tf=[a.replace("-log.xml", "") for a in os.listdir(tokd) if a.endswith("log.xml")]   
     tf.sort()
-    mq=align_tokens(tseq, m=src)
+    mq=align_tokens(tseq, textid)
     sdic=[]
     for mt in range(0, len(mq)):
         lx = 0
         lid=""
         ldic=[]
         trg = mq[mt][0]
-        ed="%s" % (tf[trg])
+        ed="%s" % (trg)
         for tag, i1, i2, j1, j2 in mq[mt][1]:
             if tag in ['insert']:
                 for l in range(j1, j2):
                     ldic.append((tag, ('i', 'i'), tseq[trg][l], ed))
             elif tag in ['delete']:
                 for l in range(i1, i2):
-                    sid = tseq[src][l][1]
+                    sid = tseq[textid][l][1]
                     if sid != lid:
                         sdic.append(ldic)
                         ldic = []
                         lid = sid
-                    ldic.append((tag, tseq[src][l], ('d', 'd'), ed))
+                    ldic.append((tag, tseq[textid][l], ('d', 'd'), ed))
             elif tag in ['equal', 'replace']:
                 dx= j1 - i1
                 for l in range(i1, i2):
                     try:
-                        sid = tseq[src][l][1]
+                        sid = tseq[textid][l][1]
                     except:
-                        print(src, l, len(tseq[src]), i2)
+                        print(textid, l, len(tseq[textid]), i2)
                         break
                     if sid != lid:
                         sdic.append(ldic)
                         ldic = []
                         lid = sid
                     try:
-                        ldic.append ((tag, tseq[src][l], tseq[trg][l+dx], ed))
+                        ldic.append ((tag, tseq[textid][l], tseq[trg][l+dx], ed))
                     except:
-                        print("error,", tag, src, l, trg, l+dx)
+                        print("error,", tag, textid, l, trg, l+dx)
                         
         sdic.append(ldic)
         tdic=defaultdict(list)
@@ -111,15 +111,18 @@ def write_table(tseq, textdir, src=0):
                 diff = " diff='%d'" % (df)
             else:
                 diff = ""
-            key="<seg id='%s' tp='%d' tcount='%d'>\n" % (ix, itp, len(a) - icount)
-            val="<ref ed='%s' corresp='#%s' tp='%d' tcount='%d'%s/>\n" % (ed, tx, ttp, len(a) - dcount, diff)
+            key="<seg id='%s' tp='%d' tcount='%d'>\n" % (ix, itp-1, len(a) - icount)
+            val="<ref ed='%s' corresp='#%s' tp='%d' tcount='%d'%s/>\n" % (ed, tx, ttp-2, len(a) - dcount, diff)
             tdic[key].append(val)
     lnkd="%s/aux/lnk"%(textdir)
     os.makedirs(lnkd, exist_ok=True)
-    of=open("%s/%s-align-tab.xml" % (lnkd, tf[src]), "w", encoding="utf-8" )
-    of.write("<div ed='%s'>\n" %(tf[src]))
+    of=open("%s/%s-align-tab.xml" % (lnkd, textid), "w", encoding="utf-8" )
+    of.write("<div ed='%s'>\n" %(textid))
     k=[fx for fx in tdic.keys()]
-    k=sorted(k, key = lambda x: int(re.findall("tp='([0-9]+)'", x)[0]))
+    try:
+        k=sorted(k, key = lambda x: int(re.findall("tp='(-?[0-9]+)'", x)[0]))
+    except:
+        pass
     for kn in k:
         of.write(kn)
         of.write("".join(tdic[kn]))
@@ -132,7 +135,7 @@ def write_table(tseq, textdir, src=0):
 if __name__ == '__main__':
     tdir = sys.argv[1]
     tr = read_tokens(tdir)
-    for src in range(0, len(tr)):
-        print (src)
-        write_table(tr, tdir, src)
+    for src in tr:
+         print (src)
+         write_table(tr, tdir, src)
     print ("Wrote tables for %s" % (tdir))
