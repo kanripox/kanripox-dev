@@ -8,7 +8,8 @@ from collections import defaultdict
 
 def read_tokens(textdir):
     tokd="%s/aux/tok"%(textdir)
-    tf=[a.replace("-log.xml", "") for a in os.listdir(tokd) if a.endswith("log.xml")]
+#    tf=[a.replace("-log.xml", "") for a in os.listdir(tokd) if a.endswith("log.xml")]
+    tf=[a.split("-")[0] for a in os.listdir(tokd) if a.endswith("000.xml")]
     tf.sort()
     # the sequences for every file will be stored here
     tseq = {}
@@ -141,25 +142,31 @@ def read_align_tabs(textdir):
     for atb in at:
         tree = ET.parse("%s/%s" % (lnkd, atb))
         root = tree.getroot()
+        textid = root.attrib['ed']
         for seg in root:
             segid=seg.attrib['id']
             tp=seg.attrib['tp']
             tcount=seg.attrib['tcount']
-            segs[segid].append((segid, int(tp), int(tcount)))
+            segs[segid].append((textid, segid, int(tp), int(tcount)))
             for ref in seg:
-                segs[segid].append((ref.attrib['corresp'][1:], int(ref.attrib['tp']), int(ref.attrib['tcount'])))
+                segs[segid].append((ref.attrib['ed'], ref.attrib['corresp'][1:], int(ref.attrib['tp']), int(ref.attrib['tcount'])))
     return segs
 
 def get_alignments(ttok, s):
     "Get the alignments for a segment; ttok is the token table."
     tk = []
     for seg in s:
-        idx = "_".join(seg[0].split("_")[0:2])
-        if not idx in ttok:
-            idx=seg[0].split("_")[0]
-        tp=seg[1]
-        tcount = seg[2]
-        toks = ttok[idx][tp:tp+tcount]
+        idx = seg[0]
+#        idx = "_".join(seg[0].split("_")[0:2])
+#        if not idx in ttok:
+#            idx=seg[0].split("_")[0]
+        tp=seg[2]
+        tcount = seg[3]
+        try:
+            toks = ttok[idx][tp:tp+tcount]
+        except:
+            print(idx, seg)
+            return
         if len(toks) < 1:
             toks = [('', idx, 0)]
         tl = []

@@ -128,6 +128,27 @@ These are required to produce the alignment tables.
       id="CH1a0907_CHANT_001-4a.35"
       el="p seg"
       pos="2">行</t>
+   <t tp="470" id="CH1a0907_CHANT_001-4a.36" el="p seg" pos="1">君</t>
+   <t tp="471" id="CH1a0907_CHANT_001-4a.36" el="p seg" pos="2">子</t>
+   <t tp="472" id="CH1a0907_CHANT_001-4a.36" el="p seg" pos="3">之</t>
+   <t tp="473" id="CH1a0907_CHANT_001-4a.36" el="p seg" pos="4">所</t>
+   <t tp="474" id="CH1a0907_CHANT_001-4a.36" el="p seg" pos="5">以</t>
+   <t tp="475" id="CH1a0907_CHANT_001-4a.36" el="p seg" pos="6">動</t>
+   <t tp="476" id="CH1a0907_CHANT_001-4a.36" el="p seg" pos="7">天</t>
+   <t tp="477" id="CH1a0907_CHANT_001-4a.36" el="p seg" pos="8">地</t>
+   <t tp="478"
+      f="，"
+      id="CH1a0907_CHANT_001-4a.36"
+      el="p seg"
+      pos="9">也</t>
+   <t tp="479" id="CH1a0907_CHANT_001-4a.37" el="p seg" pos="1">可</t>
+   <t tp="480" id="CH1a0907_CHANT_001-4a.37" el="p seg" pos="2">不</t>
+   <t tp="481" id="CH1a0907_CHANT_001-4a.37" el="p seg" pos="3">慎</t>
+   <t tp="482"
+      f="！』"
+      id="CH1a0907_CHANT_001-4a.37"
+      el="p seg"
+      pos="4">乎</t>
 [...]
 </div>
 #+end_example
