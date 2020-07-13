@@ -25,17 +25,21 @@
 
 ** Textual sources
 
-   Textual sources are treated slightly different depending on their
-   status as *documentary* or *interpretative*. Apart from that, they are 
+   Textual sources are treated slightly different depending on their status as
+   *documentary* or *interpretative*. Apart from that, they are treated the
+   same.
 
-   Text content is distributed across several XML files, usually one
-    file for a smaller unit of the text, such as a /juan/ or
-    /booklet/, in the same way this is done in the Mandoku format of
-    the Kanseki Repository. These files are put into subfolders
-    according to the edition they belong to, a parent XML files
-    includes all of them into one virtual document (using XInclude).
-    -> for other files use alignment table that indicates were to
-    split.
+   Text content might be encoded in XML using the TEI Guidelines, or in the
+   Mandoku text format of the Kanseki Repository. Processing for additional
+   formats might be added in the future.
+
+   In the case of a XML file, the text content is distributed across several
+    files, usually one file for a smaller unit of the text, such as a /juan/ or
+    /booklet/, in the same way this is done in the Mandoku format of the Kanseki
+    Repository. These files are put into subfolders according to the edition
+    they belong to, a parent XML files includes all of them into one virtual
+    document (using XInclude). -> for other files use alignment table that
+    indicates were to split.
 
     The language of the texts in the Kanseki Repository in general will be
     "Literary Chinese", for which the ISO 639-3 language code is lzh. For other
@@ -64,7 +68,7 @@
 
 *** Commentaries (=com=)
 
-    Other derived texts, summaries etc. will go here. 
+Other derived texts, summaries etc. will go here. Or put these into the above categories?
 
 ** Auxiliary files (=aux=)
 
@@ -73,7 +77,11 @@
    tokens, link lists that are used to align the various versions of a
    text and other types of annotations, some might be algorithmically
    derived from the texts, others hand-crafted.
-
+*** Structural divisions (=div=)
+The structural divisions link an abstract notion of the divisions (books,
+chapters, sections) in a work to the addressable, machine readable locations in
+a file. At the same time, they also serve to structurally align the different
+texts at an abstract level.
 *** Link Lists (=lnk=)
 
     Various types:

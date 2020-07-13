@@ -24,6 +24,7 @@ meta_re = re.compile(u'(<[^>]*>|\n#\+BEGIN_VERSE\n|\n#\+END_VERSE\n|\xb6|\n)')
 
 
 def line2arr(line):
+    line = re.sub("[\n\t ]+", "", line)
     ex=kp_re.split("。"+line)
     ex.insert(0,(''))
     cs=[a for a in zip(*[iter(ex)]*2)]
@@ -91,6 +92,8 @@ def parse2tok(p):
     root = tree.getroot()
     EI.include(root)
     ls = root.findall(f'.//{tei_xmlns}line')
+    if len(ls) == 0:
+        ls = root.findall(f'.//{tei_xmlns}seg')
     tok=[]
     for b in ls:
         tag = b.tag.replace(f'{tei_xmlns}', '')
