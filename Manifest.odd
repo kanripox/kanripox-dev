@@ -16,9 +16,16 @@
   </teiHeader>
   <text>
     <body>
+      <div>
+        <head>Introduction</head>
+        <p>The <code>Manifest.xml</code> described here contains information about a set of editions that are grouped here together, usually for the purpose of further description and processing.</p>
+      </div>
+      <div>
+        <head>The elements defined for the Manifest</head>
       <schemaSpec ident="KRXManifest" start="manifest" ns="http://kanripo.org/ns/KRX/Manifest/1.0" prefix="krx_" targetLang="en" docLang="en">
       <desc>A schema for Manifest files in the KanripoX project</desc>
         <elementSpec ident="manifest">
+          <desc>The root of the manifest file.</desc>
           <content>
             <sequence>
               <elementRef key="title" minOccurs="0"/>
@@ -86,6 +93,7 @@
           </attList>
         </elementSpec>
       </schemaSpec>
+      </div>
     </body>
   </text>
 </TEI>
