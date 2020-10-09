@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:svg="http://www.w3.org/2000/svg"
+  xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Schema for Manifest files in the KanripoX project</title>
+      </titleStmt>
+      <publicationStmt>
+        <p>Available at https://github.com/kanripox/kanripox-dev</p>
+      </publicationStmt>
+      <sourceDesc>
+        <p>Created from scratch</p>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <schemaSpec ident="KRXManifest" start="manifest" ns="http://kanripo.org/ns/KRX/Manifest/1.0" prefix="krx_" targetLang="en" docLang="en">
+      <desc>A schema for Manifest files in the KanripoX project</desc>
+        <elementSpec ident="manifest">
+          <content>
+            <sequence>
+              <elementRef key="title" minOccurs="0"/>
+              <elementRef key="description"/>
+              <elementRef key="editions"/>
+            </sequence>
+          </content>
+        </elementSpec>
+        <elementSpec ident="title">
+          <content><textNode/></content>
+        </elementSpec>
+        <elementSpec ident="description">
+          <content><textNode/></content>
+        </elementSpec>
+        <elementSpec ident="editions">
+          <content>
+              <elementRef key="edition" minOccurs="1" maxOccurs="unbounded"/>
+          </content>
+        </elementSpec>
+        <elementSpec ident="documentary">
+          <content>
+            <elementRef key="edition"/>
+          </content>
+        </elementSpec>
+        <elementSpec ident="edition">
+          <content>
+            <elementRef key="description"/>
+          </content>
+          <attList>
+            <attDef ident="id" usage="req">
+              <datatype>
+                <dataRef name="ID"></dataRef>
+              </datatype>
+            </attDef>
+            <attDef ident="format" usage="req">
+                <valList type="closed">
+                  <valItem ident="xml/TEI">
+                    <desc>TEI file encoded in XML</desc>
+                  </valItem>
+                  <valItem ident="txt/mandoku">
+                    <desc>Mandoku format</desc>
+                  </valItem>
+                </valList>
+            </attDef>
+            <attDef ident="location" usage="req">
+              <datatype>
+                <dataRef name="string"></dataRef>
+              </datatype>
+            </attDef>
+            <attDef ident="type" usage="req">
+              <valList type="closed">
+                <valItem ident="documentary">
+                  <desc>An edition that documents an existing print source as faithful as possible, without editorial changes.</desc>
+                </valItem>
+                <valItem ident="interpretative">
+                  <desc>An edition that might be based on a print source, but possibly makes editorial changes.</desc>
+                </valItem>
+              </valList>
+            </attDef>
+            <attDef ident="language">
+              <datatype>
+                <dataRef name="language"></dataRef>
+              </datatype>
+            </attDef>
+          </attList>
+        </elementSpec>
+      </schemaSpec>
+    </body>
+  </text>
+</TEI>

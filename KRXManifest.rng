@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:tei="http://www.tei-c.org/ns/1.0"
+         xmlns:teix="http://www.tei-c.org/ns/Examples"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         ns="http://kanripo.org/ns/KRX/Manifest/1.0"><!--
+Schema generated from ODD source 2020-10-09T02:13:10Z. .
+TEI Edition: Version 4.1.0. Last updated on
+	19th August 2020, revision b414ba550
+TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
+ A schema for Manifest files in the KanripoX project 
+--><!---->
+   <sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+           prefix="tei"
+           uri="http://www.tei-c.org/ns/1.0"/>
+   <define name="krx_manifest">
+      <element name="manifest">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+         <group>
+            <optional>
+               <ref name="krx_title"/>
+            </optional>
+            <ref name="krx_description"/>
+            <ref name="krx_editions"/>
+         </group>
+      </element>
+   </define>
+   <define name="krx_title">
+      <element name="title">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+         <text/>
+      </element>
+   </define>
+   <define name="krx_description">
+      <element name="description">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+         <text/>
+      </element>
+   </define>
+   <define name="krx_editions">
+      <element name="editions">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+         <oneOrMore>
+            <ref name="krx_edition"/>
+         </oneOrMore>
+      </element>
+   </define>
+   <define name="krx_edition">
+      <element name="edition">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+         <ref name="krx_description"/>
+         <attribute name="id">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            <data type="ID"/>
+         </attribute>
+         <attribute name="format">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            <choice>
+               <value>xml/TEI</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">TEI file encoded in XML</a:documentation>
+               <value>txt/mandoku</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Mandoku format</a:documentation>
+            </choice>
+         </attribute>
+         <attribute name="location">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            <data type="string"/>
+         </attribute>
+         <attribute name="type">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            <choice>
+               <value>documentary</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An edition that documents an existing print source as faithful as possible, without editorial changes.</a:documentation>
+               <value>interpretative</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An edition that might be based on a print source, but possibly makes editorial changes.</a:documentation>
+            </choice>
+         </attribute>
+         <optional>
+            <attribute name="language">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+               <data type="language"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <start>
+      <choice>
+         <ref name="krx_manifest"/>
+      </choice>
+   </start>
+</grammar>

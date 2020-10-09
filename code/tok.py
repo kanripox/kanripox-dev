@@ -78,6 +78,7 @@ def mandoku2tok(p):
                 lcnt = 0
             lcnt += len(re.findall("\xb6", line))
             line = line.replace("\xb6", "")
+            line = re.sub("<md:[^>]+>", "", line)
             seq = line2arr(line)
             cnt = 0
             for s in seq:

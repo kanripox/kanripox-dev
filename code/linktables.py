@@ -19,6 +19,7 @@ def read_tokens(textdir):
         target.sort()
         t1 = []
         for t in target:
+            print ("%s/%s" % (tokd, t))
             tree = ET.parse("%s/%s" % (tokd, t))
             root = tree.getroot()
             p=root.findall(".//t")
