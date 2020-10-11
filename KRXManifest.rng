@@ -5,7 +5,7 @@
          xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://kanripo.org/ns/KRX/Manifest/1.0"><!--
-Schema generated from ODD source 2020-10-09T02:13:10Z. .
+Schema generated from ODD source 2020-10-10T04:31:14Z. .
 TEI Edition: Version 4.1.0. Last updated on
 	19th August 2020, revision b414ba550
 TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
@@ -14,15 +14,26 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
    <sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron"
            prefix="tei"
            uri="http://www.tei-c.org/ns/1.0"/>
+   <define name="krx_manifests">
+      <element name="manifests">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Root for manifests that contain multiple manifest elements.</a:documentation>
+         <oneOrMore>
+            <ref name="krx_manifest"/>
+         </oneOrMore>
+      </element>
+   </define>
    <define name="krx_manifest">
       <element name="manifest">
-         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The root of the manifest. One manifest describes one work.</a:documentation>
          <group>
             <optional>
                <ref name="krx_title"/>
             </optional>
             <ref name="krx_description"/>
             <ref name="krx_editions"/>
+            <optional>
+               <ref name="krx_divisions"/>
+            </optional>
          </group>
       </element>
    </define>
@@ -35,12 +46,19 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
    <define name="krx_description">
       <element name="description">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-         <text/>
+         <zeroOrMore>
+            <choice>
+               <text/>
+               <optional>
+                  <ref name="krx_note"/>
+               </optional>
+            </choice>
+         </zeroOrMore>
       </element>
    </define>
    <define name="krx_editions">
       <element name="editions">
-         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The editions representing the work under consideration. Work is taken in a very broad sense here.</a:documentation>
          <oneOrMore>
             <ref name="krx_edition"/>
          </oneOrMore>
@@ -48,14 +66,19 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
    </define>
    <define name="krx_edition">
       <element name="edition">
-         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-         <ref name="krx_description"/>
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">One edition of the work. If there are multiple <code xmlns="http://www.w3.org/1999/xhtml">&lt;divisions&gt;</code>, this indicates that the sequence of these divisions make up the work.</a:documentation>
+         <group>
+            <ref name="krx_description"/>
+            <zeroOrMore>
+               <ref name="krx_divisions"/>
+            </zeroOrMore>
+         </group>
          <attribute name="id">
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The identifier of the edition. This is required and has to be unique within this manifest. It will be used by the processing tools to refer to this edition.</a:documentation>
             <data type="ID"/>
          </attribute>
          <attribute name="format">
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The parsing tool is selected based on the format given here, there are two formats defined at the moment. Additional formats can be added, but require a plugin to parse them.</a:documentation>
             <choice>
                <value>xml/TEI</value>
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">TEI file encoded in XML</a:documentation>
@@ -64,11 +87,11 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
             </choice>
          </attribute>
          <attribute name="location">
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">This gives either the relative path to the local folder containing the edition or a resolvable remote reference to the edition, for example on github.</a:documentation>
             <data type="string"/>
          </attribute>
          <attribute name="type">
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The edition has to be declared as either documentary or interpretative.</a:documentation>
             <choice>
                <value>documentary</value>
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An edition that documents an existing print source as faithful as possible, without editorial changes.</a:documentation>
@@ -78,8 +101,107 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
          </attribute>
          <optional>
             <attribute name="language">
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The language of the document, identified with an identifier according to RFC 1766.</a:documentation>
                <data type="language"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_divisions">
+      <element name="divisions">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The internal subdivisions of the work under consideration.</a:documentation>
+         <oneOrMore>
+            <ref name="krx_div"/>
+         </oneOrMore>
+         <optional>
+            <attribute name="edition">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">If necessary, the edition for which these textual divisions are valid can be given here </a:documentation>
+               <data type="token"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_div">
+      <element name="div">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">One specific subdivision on any level. </a:documentation>
+         <group>
+            <optional>
+               <ref name="krx_edRef"/>
+            </optional>
+            <optional>
+               <ref name="krx_description"/>
+            </optional>
+            <zeroOrMore>
+               <ref name="krx_div"/>
+            </zeroOrMore>
+         </group>
+         <optional>
+            <attribute name="label">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A label to identify the subdivision, can be any string, but should be unique in the manifest. This can be used to access this textual division.</a:documentation>
+               <data type="token"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="edition">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A reference to the edition, as defined elsewhere in this manifest.</a:documentation>
+               <data type="IDREF"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="start">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The sequencial number of the first token of this division in the token list.</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="end">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The sequencial number of the last token of this division in the token list.</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="divid">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">If the source file of this edition has an identifier (usually a xml:id for this subdivision), it can be recorded here.</a:documentation>
+               <data type="token"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_note">
+      <element name="note">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An additional note</a:documentation>
+         <text/>
+      </element>
+   </define>
+   <define name="krx_edRef">
+      <element name="edRef">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Reference to this subdivision in one specific edition, identified by the .</a:documentation>
+         <empty/>
+         <optional>
+            <attribute name="start">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The sequencial number of the first token of this division in the token list.</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="end">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The sequencial number of the last token of this division in the token list.</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="key">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A reference to the edition, as defined elsewhere in this manifest.</a:documentation>
+               <data type="IDREF"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="timestamp">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The timestamp in ISO format, e.g. .</a:documentation>
+               <data type="dateTime"/>
             </attribute>
          </optional>
          <empty/>
@@ -88,6 +210,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
    <start>
       <choice>
          <ref name="krx_manifest"/>
+         <ref name="krx_manifests"/>
       </choice>
    </start>
 </grammar>

@@ -92,11 +92,23 @@ def parse2tok(p):
     os.chdir(os.path.dirname(p))
     root = tree.getroot()
     EI.include(root)
+    parent_map = {c: p for p in root.iter() for c in p}
     ls = root.findall(f'.//{tei_xmlns}line')
     if len(ls) == 0:
         ls = root.findall(f'.//{tei_xmlns}seg')
+    if len(ls) == 0:
+        ls = root.findall(f'.//{tei_xmlns}l')
     tok=[]
+    divs=[]
     for b in ls:
+        p=parent_map[b]
+        if (p.tag == '{http://www.tei-c.org/ns/1.0}head'):
+            pdiv = parent_map[p]
+            if f'{xml_xmlns}id' in pdiv.attrib:
+                pdivid=pdiv.attrib[f'{xml_xmlns}id']
+            else:
+                pdivid=''
+            divs.append((len(tok), b.text, pdivid))
         tag = b.tag.replace(f'{tei_xmlns}', '')
         if f'{xml_xmlns}id' in b.attrib:
             id=b.attrib[f'{xml_xmlns}id']
@@ -110,7 +122,7 @@ def parse2tok(p):
             cnt += 1
             tok.append((tag, id, cnt, s))
     os.chdir(cwd)
-    return tok
+    return (tok, divs)
 
 def write_tok(tok, tok_base, step=10000, log=False):
     """tok is the list of tokens, tok_base the stub for the filename, including branch."""
@@ -144,5 +156,6 @@ if __name__ == '__main__':
     base="/home/chris/Dropbox/current/kanripox/KR6c0128/"
     ed= base + "doc/CBETA/KR6c0128.xml"
     tokd="%s/aux/tok"%(base)
-    tok=parse2tok(ed)
+    tok, divs=parse2tok(ed)
     print (tok)
+    print (divs)
