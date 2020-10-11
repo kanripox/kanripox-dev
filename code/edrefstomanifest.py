@@ -48,6 +48,6 @@ for edref in edrefs:
                 new.attrib['key'] = key
                 new.attrib['start'] = str(nstart)
                 new.attrib['end'] = str(nend)
-            print (nend)
+
 
 mtree.write("Manifest-n.xml", encoding="utf-8", xml_declaration=True, method="xml", short_empty_elements=True)

@@ -17,14 +17,29 @@
   <text>
     <body>
       <div>
-        <head>Introduction</head>
+        <head>Overview</head>
         <p>The <code>Manifest.xml</code> described here contains information about a set of editions that are grouped here together, usually for the purpose of further description and processing.</p>
-        <p>There are two main elements under the root element <gi>manifest</gi>:
+        <p>There are two main elements under the root element <gi>manifest</gi><note place="bottom">There are in fact two possible root elements, the other being <gi>manifests</gi> for a grouping of <code>manifest</code> elements.</note>:
           <specList>
             <specDesc key="editions"/>
             <specDesc key="divisions"/>
           </specList>
+          
       </p>
+        <p>The <gi>editions</gi> element holds information about the editions that are collected here.  It contains <gi>edition</gi> elements, which give the details for each edition. This includes also the <att>type</att>, which can be either "documentary" or "interpretative".  Documentary editions are editions that strive to reproduce an existing print edition, while interpretative editions do reflect the views of the editor and do not follow one single edition. </p>
+        <p>Other details for editions that will be collected here are the <att>id</att>, which is a unique label (or identifier) used to refer to this specific edition within the manifest and the processing systems. </p>
+        <p>The <gi>edition</gi> element may have the following children:
+        <specList>
+          <specDesc key="description"/>
+          <specDesc key="divisions"/>
+        </specList>Both of these elements are optional.  <gi>description</gi> contains a description of the edition, which could be the title, but also other information deemed relevant. <gi>divisions</gi> allows reference to divisions within the edition.  This element is repeatable and when occuring more than once the edition is considered made up of the sequence of these divisions.</p>
+        <p>The <gi>divisions</gi> element can also occur as a child element of manifest, optionally following the <gi>editions</gi> element.  If used here, there will be only one division element, which holds all subdivisions as possibly nesting <gi>div</gi> elements. The purpose of this element is to provide an entry point to the editions, which is neither tied to one specific edition, nor to a hyperlink or similar in a technical sense. The <att>label</att> on the <gi>div</gi> elements is used to provide a human readable label that can be used to point to that specific division, much the same as "Chapter 2" will (usually) refer to the same section of a work, no matter which edition is used.  To serve as a link between this nesting structure of chapters, sections and so forth, each <gi>div</gi> can have one or more <gi>edRef</gi> elements, which point to the text span in one of the editions that is covering this specific section.<egXML xmlns="http://www.tei-c.org/ns/Examples">
+     <div label="第一章">
+			<edRef key="KR5c0057_tls" start="0" end="61"/>
+			<edRef key="CH1a0918a_chant" start="0" end="58"/>
+			<edRef key="CH1a0918b_chant" start="2" end="402"/>
+     </div>
+        </egXML> In this example, the <att>start</att> and <att>end</att> attributes give the number of the first and last token that is part of this section of a text, thus identifying the text span independent of the text format of the text.  Other possibilities for adressing a text span are available if the edition is in TEI/XML.</p>
       </div>
       <div>
         <head>The elements defined for the Manifest</head>
@@ -50,9 +65,11 @@
           <remarks><p>Currently, only one work can be described per one manifest file.  Need to think about what to do with use cases that need multiple works. Use several <gi>manifest</gi> in a file? </p></remarks>
         </elementSpec>
         <elementSpec ident="title" module="KRXManifest">
+          <desc>Title of the work.</desc>
           <content><textNode/></content>
         </elementSpec>
         <elementSpec ident="description"  module="KRXManifest">
+          <desc>Description of the edition or item this element is attached to.</desc>
           <content>
               <alternate minOccurs="0" maxOccurs="unbounded">
               <textNode/>                
