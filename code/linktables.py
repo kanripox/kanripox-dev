@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 # coding: utf-8
+# read the tokens in aux/tok and write the linktables in aux/lnk/
 from difflib import *
 import xml.etree.ElementTree as ET
 import os, re, sys
 from collections import defaultdict
 
+krx_xmlns="{http://kanripo.org/ns/KRX/Manifest/1.0}"
+
 
 def read_tokens(textdir):
+    dmap=get_div_maps(textdir)
     tokd="%s/aux/tok"%(textdir)
 #    tf=[a.replace("-log.xml", "") for a in os.listdir(tokd) if a.endswith("log.xml")]
     tf=[a.split("-")[0] for a in os.listdir(tokd) if a.endswith("000.xml")]
@@ -29,22 +33,58 @@ def read_tokens(textdir):
                 else:
                     ix = "no_id"
                 t1.append((child.text, ix, int(child.attrib['tp']), child.attrib['pos'] ))
-        tseq[textid] = t1
+        # adjust for realignment
+        if (textid in dmap):
+            sn=[]
+            for dx in dmap[textid]:
+                sn.extend(t1[slice(dx[1], dx[2])])
+            tseq[textid] = sn
+        else:
+            tseq[textid] = t1
+
     return tseq
 
 
 # In[5]:
+def get_div_maps(textdir):
+    os.chdir(textdir)
+    mtree=ET.parse("Manifest.xml")
+    doc = mtree.findall(f'.//{krx_xmlns}edition')
+    dmap={}
+    for d in doc:
+        edid=d.attrib['id']
+        divs=d.findall(f'{krx_xmlns}divisions/{krx_xmlns}div')
+        if divs:
+            mx=[]
+            for div in divs:
+                mx.append((int(div.attrib['sequence']), int(div.attrib['start']), int(div.attrib['end'])))
+            mx=sorted(mx, key = lambda x : x[0])
+            dmap[edid]=mx
+    return dmap
 
 
-def align_tokens(tseq, textid):
+
+def align_tokens(tseq, textid, dmap=None):
     mq=[]
     sq=SequenceMatcher()
+    # if (textid in dmap):
+    #     sn=[]
+    #     for dx in dmap[textid]:
+    #         sn.extend(tseq[textid][slice(dx[1], dx[2])])
+    #     sq.set_seq1([a[0] for a in sn])
+    # else:
     sq.set_seq1([a[0] for a in tseq[textid]])
-    for s1 in tseq:
-        if s1 != textid:
-            sq.set_seq2([a[0] for a in tseq[s1]])
+    for t2 in tseq:
+        if t2 != textid:
+            # if (t2 in dmap):
+            #     sn=[]
+            #     for dx in dmap[t2]:
+            #         sn.extend(tseq[t2][slice(dx[1], dx[2])])
+            #     sq.set_seq2([a[0] for a in sn])
+            # else:
+            sq.set_seq2([a[0] for a in tseq[t2]])
             o=sq.get_opcodes()
-            mq.append((s1, o))
+            mq.append((t2, o))
     return mq
 
 
@@ -52,7 +92,8 @@ def write_table(tseq, textdir, textid):
     tokd="%s/aux/tok"%(textdir)
     tf=[a.replace("-log.xml", "") for a in os.listdir(tokd) if a.endswith("log.xml")]   
     tf.sort()
-    mq=align_tokens(tseq, textid)
+    dmap=get_div_maps(textdir)
+    mq=align_tokens(tseq, textid, dmap)
     sdic=[]
     for mt in range(0, len(mq)):
         lx = 0
@@ -87,6 +128,7 @@ def write_table(tseq, textdir, textid):
                     try:
                         ldic.append ((tag, tseq[textid][l], tseq[trg][l+dx], ed))
                     except:
+                        #maybe this happens if one of the texts is too short?
                         print("error,", tag, textid, l, trg, l+dx)
                         
         sdic.append(ldic)
@@ -178,7 +220,10 @@ def get_alignments(ttok, s):
     #break
     return {'witnesses' : tk}
 if __name__ == '__main__':
-    tdir = sys.argv[1]
+    try:
+        tdir = sys.argv[1]
+    except:
+        tdir = os.path.abspath(".")
     tr = read_tokens(tdir)
     for src in tr:
          print (src)

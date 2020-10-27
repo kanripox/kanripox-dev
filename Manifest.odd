@@ -62,6 +62,14 @@
               <elementRef key="divisions" minOccurs="0"/>
             </sequence>
           </content>
+          <attList>
+            <attDef ident="xml:id" usage="opt">
+              <desc>The identifier of the work. This will be used to refer to this manifest from the display of this text.</desc>
+              <datatype>
+                <dataRef name="ID"/>
+              </datatype>
+            </attDef>          
+          </attList>
           <remarks><p>Currently, only one work can be described per one manifest file.  Need to think about what to do with use cases that need multiple works. Use several <gi>manifest</gi> in a file? </p></remarks>
         </elementSpec>
         <elementSpec ident="title" module="KRXManifest">
@@ -77,11 +85,48 @@
               </alternate>
           </content>
         </elementSpec>
-        <elementSpec ident="editions"  module="KRXManifest">
+<elementSpec ident="editions"  module="KRXManifest">
           <desc>The editions representing the work under consideration.  Work is taken in a very broad sense here.</desc>
           <content>
+            <alternate>
+              <elementRef key="editionGroup" minOccurs="1" maxOccurs="unbounded"/>
               <elementRef key="edition" minOccurs="1" maxOccurs="unbounded"/>
+            </alternate>
+          </content>          
+        </elementSpec>        
+        <elementSpec ident="editionGroup"  module="KRXManifest">
+          <desc>A group of the editions representing the work under consideration.</desc>
+          <content>
+            <elementRef key="edition" minOccurs="1" maxOccurs="unbounded"/>
           </content>
+          <attList>
+            <attDef ident="type" usage="req">
+              <desc>The treatment of the editions within this group are based on the value of this attribute.</desc>
+                <valList type="closed">
+                  <valItem ident="root">
+                    <desc>The root text of this work.</desc>
+                  </valItem>
+                  <valItem ident="root+annotation">
+                    <desc>The root text, interspersed with commentary.</desc>
+                  </valItem>
+                  <valItem ident="annotation">
+                    <desc>Commentary to the root text, without repeating the text.</desc>
+                  </valItem>
+                  <valItem ident="translation">
+                    <desc>Translations of the text and / or commentary.</desc>
+                  </valItem>
+                  <valItem ident="other">
+                    <desc>Texts, that are grouped with this texts for some reason other than being textually related. </desc>
+                  </valItem>
+                </valList>
+            </attDef>
+            <attDef ident="sigle" usage="opt">
+              <desc>A short identifier used to identify this group of editions.</desc>
+              <datatype>
+                <dataRef name="string"/>
+              </datatype>
+            </attDef>
+          </attList>
         </elementSpec>
         <elementSpec ident="edition"  module="KRXManifest">
           <desc>One edition of the work. If there are multiple <gi>divisions</gi>, this indicates that the sequence of these divisions make up the work.</desc>
@@ -92,6 +137,12 @@
             </sequence>  
           </content>
           <attList>
+            <attDef ident="xml:id" usage="opt">
+              <desc>The identifier of the work. This will be used to refer to this manifest from the display of this text.</desc>
+              <datatype>
+                <dataRef name="ID"/>
+              </datatype>
+            </attDef>          
             <attDef ident="id" usage="req">
               <desc>The identifier of the edition.  This is required and has to be unique within this manifest. It will be used by the processing tools to refer to this edition.</desc>
               <datatype>
@@ -116,6 +167,17 @@
               </datatype>
               <remarks><p>TODO: format for remote reference.</p><p>TODO: Format for identifying portion of text in file.</p></remarks>
             </attDef>
+            <attDef ident="base" usage="opt">
+              <desc>The edition marked as 'base' is the reference edition for sequential reordering.</desc>
+              <valList type="closed">
+                <valItem ident="true">
+                  <desc>This edition is the reference edition</desc>
+                </valItem>
+                <valItem ident="false">
+                  <desc>Not the reference edition (default)</desc>
+                </valItem>
+              </valList>
+            </attDef>
             <attDef ident="type" usage="req">
               <desc>The edition has to be declared as either <soCalled>documentary</soCalled> or <soCalled>interpretative</soCalled>.</desc>
               <valList type="closed">
@@ -131,6 +193,12 @@
               <desc>The language of the document, identified with an identifier according to RFC 1766.</desc>
               <datatype>
                 <dataRef name="language"/>
+              </datatype>
+            </attDef>
+            <attDef ident="sigle" usage="opt">
+              <desc>A short identifier used to identify this edition.</desc>
+              <datatype>
+                <dataRef name="string"/>
               </datatype>
             </attDef>
           </attList>
@@ -153,7 +221,7 @@
           <desc>One specific subdivision on any level. </desc>
           <content>
             <sequence>
-             <elementRef key="edRef" minOccurs="0"/>
+             <elementRef key="edRef" minOccurs="0" maxOccurs="unbounded"/>
              <elementRef key="description" minOccurs="0"/>              
              <elementRef key="div" minOccurs="0" maxOccurs="unbounded"/>
             </sequence>
@@ -169,6 +237,12 @@
               <desc>A reference to the edition, as defined elsewhere in this manifest.</desc>
               <datatype>
                 <dataRef name="IDREF"/>
+              </datatype>
+            </attDef>
+            <attDef ident="sequence" usage="opt">
+              <desc>Sequencial number of this division, given in such a way that ordering by this number will produce the text in the same sequence as the base edition.</desc>
+              <datatype>
+                <dataRef name="nonNegativeInteger"/>
               </datatype>
             </attDef>
             <attDef ident="start" usage="opt">

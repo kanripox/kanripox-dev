@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+# run this within the text directory
 import os
 import xml.etree.ElementTree as ET
 

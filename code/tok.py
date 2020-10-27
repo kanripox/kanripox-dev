@@ -4,10 +4,12 @@
 import xml.etree.ElementTree as ET
 import xml.etree.ElementInclude as EI
 import os, json, re
-from collatex import *
+#from collatex import *
 
 tei_xmlns="{http://www.tei-c.org/ns/1.0}"
 xml_xmlns="{http://www.w3.org/XML/1998/namespace}"
+krx_xmlns="{http://kanripo.org/ns/KRX/Manifest/1.0}"
+
 #kanji='\u3000\u3400-\u4DFF\u4e00-\u9FFF\uF900-\uFAFF'
 # remove space from kanji definition:
 kanji='\u3400-\u4DFF\u4e00-\u9FFF\uF900-\uFAFF'
@@ -130,11 +132,12 @@ def write_tok(tok, tok_base, step=10000, log=False):
     for cnt, i in enumerate(range (0, len(tok), step)):
         nf="%4.4d" % (cnt)
         xid=f"{fnbase}-tok-{nf}"
+        edid=f"{fnbase}"
         n=f"tok-{nf}"
         ofn="%s-tok-%s.xml" % (tok_base, nf)
         of=open(ofn, mode="w", encoding="utf8")
         of.write(f"""<?xml version="1.0" encoding="UTF-8"?>
-<div xml:id="{xid}" n="{n}">
+<div xml:id="{xid}" n="{n}" ed="{edid}">
 """)
         limit = min(len(tok), i+step)
         for j in range(i, limit, 1):
@@ -152,10 +155,39 @@ def write_tok(tok, tok_base, step=10000, log=False):
         of.write("</div>\n")
         of.close()
 
+def make_toks():
+    mtree=ET.parse("Manifest.xml")
+    if not os.path.exists("aux/tok"):
+        os.mkdir("aux/tok")
+
+    doc = mtree.findall(f'.//{krx_xmlns}edition')
+    for d in doc:
+        if d.attrib['language']=='lzh':
+            toq=[]
+            edid=d.attrib['id']
+            tok_base=os.path.abspath(f"aux/tok/{edid}")
+            loc=f"{d.attrib['location']}"
+            print(edid)
+            if d.attrib['format'].startswith("txt"):
+                toq=mandoku2tok(loc)
+            elif d.attrib['format'].startswith("xml"):
+                xmlfile=[a for a in os.listdir(loc) if a.endswith("xml") and not ("_" in a)][0]
+                toq, dv = parse2tok(f"{loc}/{xmlfile}")
+            if len(toq) > 0:
+                write_tok(toq, tok_base)
+            print(len(toq))
+
+
+
 if __name__ == '__main__':
-    base="/home/chris/Dropbox/current/kanripox/KR6c0128/"
-    ed= base + "doc/CBETA/KR6c0128.xml"
-    tokd="%s/aux/tok"%(base)
-    tok, divs=parse2tok(ed)
-    print (tok)
-    print (divs)
+    # base="/home/chris/Dropbox/current/kanripox/KR6c0128/"
+    # ed= base + "doc/CBETA/KR6c0128.xml"
+    # tokd="%s/aux/tok"%(base)
+    # toq, divs=parse2tok(ed)
+    # if len(toq) > 0:
+    #         write_tok(toq, tok_base)
+    #     print(len(toq))
+#    print (tok)
+#    print (divs)
+
+    make_toks()
