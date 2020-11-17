@@ -22,7 +22,10 @@ tpx="doc"
 d={"doc": "documentary", "int": "interpretative"}
 col=[]
 for tpx in ["doc", "int"]:
-    eds = [a for a in os.listdir(tpx)]
+    try:
+        eds = [a for a in os.listdir(tpx)]
+    except:
+        continue
     eds.sort()
     doc=[]
     for ed in eds:

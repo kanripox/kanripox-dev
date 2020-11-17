@@ -221,8 +221,9 @@
           <desc>One specific subdivision on any level. </desc>
           <content>
             <sequence>
-             <elementRef key="edRef" minOccurs="0" maxOccurs="unbounded"/>
+             <elementRef key="label" minOccurs="0" maxOccurs="unbounded"/>
              <elementRef key="description" minOccurs="0"/>              
+             <elementRef key="edRef" minOccurs="0" maxOccurs="unbounded"/>
              <elementRef key="div" minOccurs="0" maxOccurs="unbounded"/>
             </sequence>
           </content> 
@@ -271,6 +272,20 @@
             <textNode/>
           </content> 
         </elementSpec>
+        <elementSpec ident="label" module="KRXManifest">
+          <desc>Additional label</desc>
+          <content>
+            <textNode/>
+          </content> 
+          <attList>
+            <attDef ident="language">
+              <desc>The language of the label, identified with an identifier according to RFC 1766.</desc>
+              <datatype>
+                <dataRef name="language"/>
+              </datatype>
+            </attDef>            
+          </attList>
+        </elementSpec>
         <elementSpec ident="edRef" module="KRXManifest">
           <desc>Reference to this subdivision in one specific edition, identified by the <code>key</code>.</desc>
           <content>
@@ -299,6 +314,12 @@
               <desc>The timestamp in ISO format, e.g. <code>2020-10-09T14:23:52+09:00</code>.</desc>
               <datatype>
                 <dataRef name="dateTime"/>
+              </datatype>
+            </attDef>
+            <attDef ident="label" usage="opt">
+              <desc>A label to identify the subdivision as used in this edition. It can be any string, but should be unique in the manifest. This can be used to access this textual division.</desc>
+              <datatype>
+                <dataRef name="token"/>
               </datatype>
             </attDef>
           </attList>

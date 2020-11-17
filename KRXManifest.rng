@@ -5,7 +5,7 @@
          xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://kanripo.org/ns/KRX/Manifest/1.0"><!--
-Schema generated from ODD source 2020-10-27T07:47:38Z. .
+Schema generated from ODD source 2020-10-27T10:45:28Z. .
 TEI Edition: Version 4.1.0. Last updated on
 	19th August 2020, revision b414ba550
 TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
@@ -193,11 +193,14 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">One specific subdivision on any level. </a:documentation>
          <group>
             <zeroOrMore>
-               <ref name="krx_edRef"/>
+               <ref name="krx_label"/>
             </zeroOrMore>
             <optional>
                <ref name="krx_description"/>
             </optional>
+            <zeroOrMore>
+               <ref name="krx_edRef"/>
+            </zeroOrMore>
             <zeroOrMore>
                <ref name="krx_div"/>
             </zeroOrMore>
@@ -247,6 +250,19 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
          <text/>
       </element>
    </define>
+   <define name="krx_label">
+      <element name="label">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Additional label</a:documentation>
+         <text/>
+         <optional>
+            <attribute name="language">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The language of the label, identified with an identifier according to RFC 1766.</a:documentation>
+               <data type="language"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
    <define name="krx_edRef">
       <element name="edRef">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Reference to this subdivision in one specific edition, identified by the .</a:documentation>
@@ -273,6 +289,12 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
             <attribute name="timestamp">
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The timestamp in ISO format, e.g. .</a:documentation>
                <data type="dateTime"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="label">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A label to identify the subdivision as used in this edition. It can be any string, but should be unique in the manifest. This can be used to access this textual division.</a:documentation>
+               <data type="token"/>
             </attribute>
          </optional>
          <empty/>

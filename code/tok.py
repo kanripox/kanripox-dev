@@ -87,8 +87,8 @@ def mandoku2tok(p):
                 cnt += 1
                 tok.append((tag, f"{pb}.{lcnt}", cnt, s))
     return tok
-
-def parse2tok(p):
+# pel is the parent element. False means: do not include
+def parse2tok(p, pel=False):
     tree = ET.parse(p)
     cwd=os.getcwd()
     os.chdir(os.path.dirname(p))
@@ -104,6 +104,10 @@ def parse2tok(p):
     divs=[]
     for b in ls:
         p=parent_map[b]
+        if pel:
+            px = p.tag.replace(f'{tei_xmlns}', '') + "/"
+        else:
+            px = ""
         if (p.tag == '{http://www.tei-c.org/ns/1.0}head'):
             pdiv = parent_map[p]
             if f'{xml_xmlns}id' in pdiv.attrib:
@@ -122,13 +126,15 @@ def parse2tok(p):
         cnt = 0
         for s in seq:
             cnt += 1
-            tok.append((tag, id, cnt, s))
+            tok.append((px + tag, id, cnt, s))
     os.chdir(cwd)
     return (tok, divs)
 
 def write_tok(tok, tok_base, step=10000, log=False):
     """tok is the list of tokens, tok_base the stub for the filename, including branch."""
     fnbase=os.path.split(tok_base)[-1]
+    if step == -1:
+        step = len(tok) + 1
     for cnt, i in enumerate(range (0, len(tok), step)):
         nf="%4.4d" % (cnt)
         xid=f"{fnbase}-tok-{nf}"
@@ -172,9 +178,9 @@ def make_toks():
                 toq=mandoku2tok(loc)
             elif d.attrib['format'].startswith("xml"):
                 xmlfile=[a for a in os.listdir(loc) if a.endswith("xml") and not ("_" in a)][0]
-                toq, dv = parse2tok(f"{loc}/{xmlfile}")
+                toq, dv = parse2tok(f"{loc}/{xmlfile}", pel=True)
             if len(toq) > 0:
-                write_tok(toq, tok_base)
+                write_tok(toq, tok_base, step=-1)
             print(len(toq))
 
 
