@@ -61,7 +61,7 @@ def linechildren(el):
     ret += el.tail
     return ret
 
-def mandoku2tok(p):
+def mandoku2tok(p, tmap):
     tok=[]
     fs = [a for a in os.listdir(p) if a.endswith("txt")]
     fs.sort()
@@ -69,8 +69,10 @@ def mandoku2tok(p):
         lcnt = 0
         pb ="noid"
         tag = "md:line"
+        level = 0
         inf=open(f"{p}/{f}", encoding="utf-8")
         for line in inf:
+            mode = "p"
             line = line[:-1].replace("\r", "")
             if line.startswith("#"):
                 continue
@@ -81,14 +83,22 @@ def mandoku2tok(p):
             lcnt += len(re.findall("\xb6", line))
             line = line.replace("\xb6", "")
             line = re.sub("<md:[^>]+>", "", line)
+            for k in tmap.keys():
+                if re.match(k, line):
+                    ln=re.sub(k, tmap[k][0], line)
+                    mode=tmap[k][1]
+                    if (mode == "h"):
+                        level = len(line) - len(ln) - 1
+                    line = ln
             seq = line2arr(line)
             cnt = 0
             for s in seq:
                 cnt += 1
-                tok.append((tag, f"{pb}.{lcnt}", cnt, s))
+                tok.append((mode, f"{pb}.{lcnt}", cnt, s))
     return tok
-# pel is the parent element. False means: do not include
-def parse2tok(p, pel=False):
+# pel is the parent element. False means: do not include  2020-11-18: this is ignored for now
+# create a tok and a div structure as table of contents
+def parse2tok(p, tmap, pel=False):
     tree = ET.parse(p)
     cwd=os.getcwd()
     os.chdir(os.path.dirname(p))
@@ -115,7 +125,18 @@ def parse2tok(p, pel=False):
             else:
                 pdivid=''
             divs.append((len(tok), b.text, pdivid))
-        tag = b.tag.replace(f'{tei_xmlns}', '')
+        pm=[p]
+        while p in parent_map:
+            p=parent_map[p]
+            pm.append(p)
+        px="p"
+        for p in pm:
+            #print(p.tag)
+            if p.tag in tmap:
+                px = tmap[p.tag][1]
+                break
+        #tag = b.tag.replace(f'{tei_xmlns}', '')
+        tag=""
         if f'{xml_xmlns}id' in b.attrib:
             id=b.attrib[f'{xml_xmlns}id']
         else:
@@ -161,6 +182,27 @@ def write_tok(tok, tok_base, step=10000, log=False):
         of.write("</div>\n")
         of.close()
 
+def maketmap(tx, txt=True):
+    nmap={}
+    if tx.tag == f"{krx_xmlns}tokenmap":
+        for m in tx:
+            rp=""
+            r = m.attrib['src']
+            tk=m.attrib['tok']
+            if r.endswith("\\n"):
+                  r = r[:-2]
+            if r.startswith("^"):
+                r = r[1:]
+            if txt:
+                r = "(%s)" % (r)
+            else:
+                r = "%s" % (r.replace("tei:", tei_xmlns))
+                if "[" in r:
+                    r, a = r.split("[")
+                    rp=a[:-1]
+            nmap[r]=(rp, tk)
+    return nmap
+
 def make_toks():
     mtree=ET.parse("Manifest.xml")
     if not os.path.exists("aux/tok"):
@@ -174,11 +216,15 @@ def make_toks():
             tok_base=os.path.abspath(f"aux/tok/{edid}")
             loc=f"{d.attrib['location']}"
             print(edid)
+            if f"{krx_xmlns}tokenmap" in [a.tag for a in list(d)]:
+                tmap=maketmap(d.find(f"{krx_xmlns}tokenmap"), txt=d.attrib['format'].startswith("txt"))
+            else:
+                tmap={}
             if d.attrib['format'].startswith("txt"):
-                toq=mandoku2tok(loc)
+                toq=mandoku2tok(loc, tmap)
             elif d.attrib['format'].startswith("xml"):
                 xmlfile=[a for a in os.listdir(loc) if a.endswith("xml") and not ("_" in a)][0]
-                toq, dv = parse2tok(f"{loc}/{xmlfile}", pel=True)
+                toq, dv = parse2tok(f"{loc}/{xmlfile}", tmap, pel=True)
             if len(toq) > 0:
                 write_tok(toq, tok_base, step=-1)
             print(len(toq))

@@ -133,6 +133,7 @@
           <content>
             <sequence>
              <elementRef key="description"/>
+             <elementRef key="tokenmap" minOccurs="0" maxOccurs="1"/> 
              <elementRef key="divisions" minOccurs="0" maxOccurs="unbounded"/> 
             </sequence>  
           </content>
@@ -321,6 +322,43 @@
               <datatype>
                 <dataRef name="token"/>
               </datatype>
+            </attDef>
+          </attList>
+        </elementSpec>
+        <elementSpec ident="tokenmap" module="KRXManifest">
+          <desc>Mappings from textual features to token types</desc>
+          <content>
+             <elementRef key="map" minOccurs="1" maxOccurs="unbounded"/>
+          </content>          
+        </elementSpec>
+        <elementSpec ident="map">
+          <desc>Map of one textual feature to a specific token type</desc>
+          <content>
+            <empty/>
+          </content>
+          <attList>
+            <attDef ident="src">
+              <desc>Element or simple matching expression (for XML texts) or regular expressions (for plain text) that identifies the textual feature</desc>
+              <datatype>
+                <dataRef name="string"/>
+              </datatype>
+            </attDef>
+            <attDef ident="tok">
+              <desc>Token type</desc>
+              <valList type="closed">
+                <valItem ident="h">
+                  <desc>Token is part of a heading</desc>
+                </valItem>
+                <valItem ident="p">
+                  <desc>Token is part of a paragraph</desc>
+                </valItem>
+                <valItem ident="n">
+                  <desc>Token is part of a note or annotation of any kind</desc>
+                </valItem>
+                <valItem ident="q">
+                  <desc>Token is part of a quotation</desc>
+                </valItem>
+              </valList>
             </attDef>
           </attList>
         </elementSpec>

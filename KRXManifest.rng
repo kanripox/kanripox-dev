@@ -5,7 +5,7 @@
          xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://kanripo.org/ns/KRX/Manifest/1.0"><!--
-Schema generated from ODD source 2020-10-27T10:45:28Z. .
+Schema generated from ODD source 2020-11-18T02:30:21Z. .
 TEI Edition: Version 4.1.0. Last updated on
 	19th August 2020, revision b414ba550
 TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
@@ -111,6 +111,9 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">One edition of the work. If there are multiple <code xmlns="http://www.w3.org/1999/xhtml">&lt;divisions&gt;</code>, this indicates that the sequence of these divisions make up the work.</a:documentation>
          <group>
             <ref name="krx_description"/>
+            <optional>
+               <ref name="krx_tokenmap"/>
+            </optional>
             <zeroOrMore>
                <ref name="krx_divisions"/>
             </zeroOrMore>
@@ -295,6 +298,42 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
             <attribute name="label">
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A label to identify the subdivision as used in this edition. It can be any string, but should be unique in the manifest. This can be used to access this textual division.</a:documentation>
                <data type="token"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_tokenmap">
+      <element name="tokenmap">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Mappings from textual features to token types</a:documentation>
+         <oneOrMore>
+            <ref name="krx_map"/>
+         </oneOrMore>
+      </element>
+   </define>
+   <define name="krx_map">
+      <element name="map">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Map of one textual feature to a specific token type</a:documentation>
+         <empty/>
+         <optional>
+            <attribute name="src">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Element or simple matching expression (for XML texts) or regular expressions (for plain text) that identifies the textual feature</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="tok">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token type</a:documentation>
+               <choice>
+                  <value>h</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a heading</a:documentation>
+                  <value>p</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a paragraph</a:documentation>
+                  <value>n</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a note or annotation of any kind</a:documentation>
+                  <value>q</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a quotation</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <empty/>
