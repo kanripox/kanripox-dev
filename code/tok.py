@@ -23,8 +23,6 @@ kp_re = re.compile(u"(%s|[%s%s])" % (ent, kanji, pua))
 punc_re = re.compile(u"[\u3001-\u33FF\uFE00-\uFF7F]")
 meta_re = re.compile(u'(<[^>]*>|\n#\+BEGIN_VERSE\n|\n#\+END_VERSE\n|\xb6|\n)')
 
-
-
 def line2arr(line):
     line = re.sub("[\n\t ]+", "", line)
     ex=kp_re.split("。"+line)
@@ -70,9 +68,9 @@ def mandoku2tok(p, tmap):
         pb ="noid"
         tag = "md:line"
         level = 0
+        mode = "p"
         inf=open(f"{p}/{f}", encoding="utf-8")
         for line in inf:
-            mode = "p"
             line = line[:-1].replace("\r", "")
             if line.startswith("#"):
                 continue
@@ -95,6 +93,9 @@ def mandoku2tok(p, tmap):
             for s in seq:
                 cnt += 1
                 tok.append((mode, f"{pb}.{lcnt}", cnt, s))
+        # the other modes are sticky, TODO need to make this configurable
+        if mode == "h":
+            mode = "p"
     return tok
 # pel is the parent element. False means: do not include  2020-11-18: this is ignored for now
 # create a tok and a div structure as table of contents

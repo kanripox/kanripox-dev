@@ -8,6 +8,20 @@ from collections import defaultdict
 
 krx_xmlns="{http://kanripo.org/ns/KRX/Manifest/1.0}"
 
+# text type is defined on the parent of the edition element
+def get_text_type(textdir, textid):
+    os.chdir(textdir)
+    mtree=ET.parse("Manifest.xml")
+    root=mtree.getroot()
+    parent_map = {c: p for p in root.iter() for c in p}
+    doc = mtree.findall(f'.//{krx_xmlns}edition[@id="%s"]' % (textid))
+    if len(doc) > 0:
+        if 'type' in parent_map[doc[0]].attrib:
+            return parent_map[doc[0]].attrib['type']
+        else:
+            "unknown"
+
+
 
 def read_tokens(textdir):
     dmap=get_div_maps(textdir)
@@ -32,7 +46,7 @@ def read_tokens(textdir):
                     ix = child.attrib['id']
                 else:
                     ix = "no_id"
-                t1.append((child.text, ix, int(child.attrib['tp']), child.attrib['pos'] ))
+                t1.append((child.text, ix, int(child.attrib['tp']), child.attrib['pos'], child.attrib['el'] ))
         # adjust for realignment
         if (textid in dmap):
             sn=[]
@@ -64,25 +78,17 @@ def get_div_maps(textdir):
 
 
 
-def align_tokens(tseq, textid, dmap=None):
+def align_tokens(tseq, textid, dmap=None, ttype="root"):
     mq=[]
     sq=SequenceMatcher()
-    # if (textid in dmap):
-    #     sn=[]
-    #     for dx in dmap[textid]:
-    #         sn.extend(tseq[textid][slice(dx[1], dx[2])])
-    #     sq.set_seq1([a[0] for a in sn])
-    # else:
     sq.set_seq1([a[0] for a in tseq[textid]])
     for t2 in tseq:
         if t2 != textid:
-            # if (t2 in dmap):
-            #     sn=[]
-            #     for dx in dmap[t2]:
-            #         sn.extend(tseq[t2][slice(dx[1], dx[2])])
-            #     sq.set_seq2([a[0] for a in sn])
-            # else:
-            sq.set_seq2([a[0] for a in tseq[t2]])
+            if ttype=="root":
+                # we ignore annotations if the source text is a root text
+                sq.set_seq2([a[0] for a in tseq[t2] if not(a[4] == "n")])
+            else:
+                sq.set_seq2([a[0] for a in tseq[t2]])
             o=sq.get_opcodes()
             mq.append((t2, o))
     return mq
@@ -93,7 +99,8 @@ def write_table(tseq, textdir, textid):
     tf=[a.replace("-log.xml", "") for a in os.listdir(tokd) if a.endswith("log.xml")]   
     tf.sort()
     dmap=get_div_maps(textdir)
-    mq=align_tokens(tseq, textid, dmap)
+    ttype=get_text_type(textdir, textid)
+    mq=align_tokens(tseq, textid, dmap, ttype)
     sdic=[]
     for mt in range(0, len(mq)):
         lx = 0
