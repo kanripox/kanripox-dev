@@ -80,11 +80,11 @@ def get_div_maps(textdir):
 
 def align_tokens(tseq, textid, dmap=None, ttype="root"):
     mq=[]
-    sq=SequenceMatcher()
+    sq=SequenceMatcher(autojunk=False)
     sq.set_seq1([a[0] for a in tseq[textid]])
     for t2 in tseq:
         if t2 != textid:
-            if ttype=="root":
+            if ttype=="rootx":
                 # we ignore annotations if the source text is a root text
                 sq.set_seq2([a[0] for a in tseq[t2] if not(a[4] == "n")])
             else:
@@ -107,11 +107,15 @@ def write_table(tseq, textdir, textid):
         lid=""
         ldic=[]
         trg = mq[mt][0]
+        if ttype=="rootx":
+            s2=[a[0] for a in tseq[trg] if not(a[4] == "n")]
+        else:
+            s2=tseq[trg]
         ed="%s" % (trg)
         for tag, i1, i2, j1, j2 in mq[mt][1]:
             if tag in ['insert']:
                 for l in range(j1, j2):
-                    ldic.append((tag, ('i', 'i'), tseq[trg][l], ed))
+                    ldic.append((tag, ('i', 'i'), s2[l], ed))
             elif tag in ['delete']:
                 for l in range(i1, i2):
                     sid = tseq[textid][l][1]
@@ -133,7 +137,8 @@ def write_table(tseq, textdir, textid):
                         ldic = []
                         lid = sid
                     try:
-                        ldic.append ((tag, tseq[textid][l], tseq[trg][l+dx], ed))
+                        if len(s2)>l+dx+1:
+                            ldic.append ((tag, tseq[textid][l], s2[l+dx], ed))
                     except:
                         #maybe this happens if one of the texts is too short?
                         print("error,", tag, textid, l, trg, l+dx)
@@ -166,7 +171,11 @@ def write_table(tseq, textdir, textid):
             if tx == 'd':
                 val="<ref ed='%s' corresp='#%s_%s' tp='%d' tcount='%d'%s/>\n" % (ed, ed, tx, ttp, len(a) - dcount, diff)
             else:
-                val="<ref ed='%s' corresp='#%s' tp='%d' tcount='%d'%s/>\n" % (ed, tx, ttp-2, len(a) - dcount, diff)
+                try:
+                    val="<ref ed='%s' corresp='#%s' tp='%d' tcount='%d'%s/>\n" % (ed, tx, ttp-2, len(a) - dcount, diff)
+                except:
+                    print(ttp)
+                    sys.exit()
             tdic[key].append(val)
     lnkd="%s/aux/lnk"%(textdir)
     os.makedirs(lnkd, exist_ok=True)
