@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:tei="http://www.tei-c.org/ns/1.0"
+         xmlns:teix="http://www.tei-c.org/ns/Examples"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         ns="http://kanripo.org/ns/KRX/Token/1.0"><!--
+Schema generated from ODD source 2020-12-03T11:44:30Z. .
+TEI Edition: Version 4.1.0. Last updated on
+	19th August 2020, revision b414ba550
+TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
+ A schema for Token files in the KanripoX project 
+--><!---->
+   <sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+           prefix="tei"
+           uri="http://www.tei-c.org/ns/1.0"/>
+   <define name="tx_tlist">
+      <element name="tlist">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Root for manifests that may contain one or more <code xmlns="http://www.w3.org/1999/xhtml">&lt;tg&gt;</code> elements.</a:documentation>
+         <oneOrMore>
+            <ref name="tx_tg"/>
+         </oneOrMore>
+      </element>
+   </define>
+   <define name="tx_tg">
+      <element name="tg">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A group of tokens.</a:documentation>
+         <zeroOrMore>
+            <ref name="tx_tg"/>
+         </zeroOrMore>
+         <zeroOrMore>
+            <ref name="tx_t"/>
+         </zeroOrMore>
+         <optional>
+            <attribute name="xml:id">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The identifier of this token group.</a:documentation>
+               <data type="ID"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="tx_t">
+      <element name="t">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A token.</a:documentation>
+         <text/>
+         <attribute name="el">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token type</a:documentation>
+            <choice>
+               <value>h</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a heading</a:documentation>
+               <value>p</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a paragraph</a:documentation>
+               <value>s</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a seg element</a:documentation>
+               <value>n</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a note or annotation of any kind</a:documentation>
+               <value>q</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a quotation</a:documentation>
+               <value>v</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a verse line</a:documentation>
+               <value>o</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a textual feature not in this list.</a:documentation>
+            </choice>
+         </attribute>
+         <optional>
+            <attribute name="pos">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The sequencial number of this token within this element (or token type).</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <attribute name="tp">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The sequencial number of this token within the whole text.</a:documentation>
+            <data type="nonNegativeInteger"/>
+         </attribute>
+         <optional>
+            <attribute name="f">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Punctuation or other non-token text items, immediately following the token.</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="p">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Punctuation or other non-token text items, immediately preceding the token.</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <attribute name="n">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Label or identifier of the element in the text of which this token is part. </a:documentation>
+            <data type="string"/>
+         </attribute>
+         <empty/>
+      </element>
+   </define>
+   <start>
+      <choice>
+         <ref name="tx_tlist"/>
+      </choice>
+   </start>
+</grammar>
