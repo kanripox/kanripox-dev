@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:tei="http://www.tei-c.org/ns/1.0"
+         xmlns:teix="http://www.tei-c.org/ns/Examples"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         ns="http://kanripo.org/ns/KRX/Nexus/1.0"><!--
+Schema generated from ODD source 2020-12-05T02:25:43Z. .
+TEI Edition: Version 4.1.0. Last updated on
+	19th August 2020, revision b414ba550
+TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
+ A schema for Token files in the KanripoX project 
+--><!---->
+   <sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+           prefix="tei"
+           uri="http://www.tei-c.org/ns/1.0"/>
+   <define name="nx_nexusList">
+      <element name="nexusList">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Root for Nexus that may contain one or more <code xmlns="http://www.w3.org/1999/xhtml">&lt;nexus&gt;</code> elements.</a:documentation>
+         <group>
+            <optional>
+               <ref name="nx_note"/>
+            </optional>
+            <oneOrMore>
+               <ref name="nx_nexus"/>
+            </oneOrMore>
+         </group>
+         <optional>
+            <attribute name="xml:id">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            </attribute>
+         </optional>
+         <attribute name="ed">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Reference to the edition defined in the manifest.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="n">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A label</a:documentation>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="nx_nexus">
+      <element name="nexus">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A group of <code xmlns="http://www.w3.org/1999/xhtml">&lt;locationRef&gt;</code> elements.</a:documentation>
+         <group>
+            <zeroOrMore>
+               <ref name="nx_note"/>
+            </zeroOrMore>
+            <zeroOrMore>
+               <ref name="nx_locationRef"/>
+            </zeroOrMore>
+         </group>
+         <optional>
+            <attribute name="xml:id">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The identifier of this token group.</a:documentation>
+               <data type="ID"/>
+            </attribute>
+         </optional>
+         <attribute name="tp">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The sequencial number of the first token of this text span.</a:documentation>
+            <data type="nonNegativeInteger"/>
+         </attribute>
+         <optional>
+            <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                       name="tcount"
+                       a:defaultValue="1">
+               <a:documentation>The number of tokens that make up this text span.</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="nx_locationRef">
+      <element name="locationRef">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Reference to a location in the token file. Optionally might hold a copy of the referenced text as a string of characters. </a:documentation>
+         <text/>
+         <attribute name="ed">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Identifier of the edition (as used in the token file)</a:documentation>
+            <data type="string"/>
+         </attribute>
+         <attribute name="tp">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The sequencial number of the first token in the token file.</a:documentation>
+            <data type="nonNegativeInteger"/>
+         </attribute>
+         <optional>
+            <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                       name="tcount"
+                       a:defaultValue="1">
+               <a:documentation>The number of tokens that make up this text span.</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <attribute name="target">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Identifier of the first token in the text span</a:documentation>
+            <data type="string"/>
+         </attribute>
+         <optional>
+            <attribute name="n">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Label or identifier for this reference.</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="nx_note">
+      <element name="note">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Annotation or additional information concerning the role or purpose of this reference.</a:documentation>
+         <text/>
+         <optional>
+            <attribute name="xml:id">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <start>
+      <choice>
+         <ref name="nx_nexusList"/>
+      </choice>
+   </start>
+</grammar>

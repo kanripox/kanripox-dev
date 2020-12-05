@@ -18,90 +18,120 @@
     <body>
       <div>
         <head>Overview</head>
-        <p>The <code>Manifest.xml</code> described here contains information about a set of editions that are grouped here together, usually for the purpose of further description and processing.</p>
-        <p>There are two main elements under the root element <gi>manifest</gi><note place="bottom">There are in fact two possible root elements, the other being <gi>manifests</gi> for a grouping of <code>manifest</code> elements.</note>:
-          <specList>
-            <specDesc key="editions"/>
-            <specDesc key="divisions"/>
-          </specList>
-          
-      </p>
-        <p>The <gi>editions</gi> element holds information about the editions that are collected here.  It contains <gi>edition</gi> elements, which give the details for each edition. This includes also the <att>type</att>, which can be either "documentary" or "interpretative".  Documentary editions are editions that strive to reproduce an existing print edition, while interpretative editions do reflect the views of the editor and do not follow one single edition. </p>
-        <p>Other details for editions that will be collected here are the <att>id</att>, which is a unique label (or identifier) used to refer to this specific edition within the manifest and the processing systems. </p>
-        <p>The <gi>edition</gi> element may have the following children:
-        <specList>
-          <specDesc key="description"/>
-          <specDesc key="divisions"/>
-        </specList>Both of these elements are optional.  <gi>description</gi> contains a description of the edition, which could be the title, but also other information deemed relevant. <gi>divisions</gi> allows reference to divisions within the edition.  This element is repeatable and when occuring more than once the edition is considered made up of the sequence of these divisions.</p>
-        <p>The <gi>divisions</gi> element can also occur as a child element of manifest, optionally following the <gi>editions</gi> element.  If used here, there will be only one division element, which holds all subdivisions as possibly nesting <gi>div</gi> elements. The purpose of this element is to provide an entry point to the editions, which is neither tied to one specific edition, nor to a hyperlink or similar in a technical sense. The <att>label</att> on the <gi>div</gi> elements is used to provide a human readable label that can be used to point to that specific division, much the same as "Chapter 2" will (usually) refer to the same section of a work, no matter which edition is used.  To serve as a link between this nesting structure of chapters, sections and so forth, each <gi>div</gi> can have one or more <gi>edRef</gi> elements, which point to the text span in one of the editions that is covering this specific section.<egXML xmlns="http://www.tei-c.org/ns/Examples">
-     <div label="第一章">
-			<edRef key="KR5c0057_tls" start="0" end="61"/>
-			<edRef key="CH1a0918a_chant" start="0" end="58"/>
-			<edRef key="CH1a0918b_chant" start="2" end="402"/>
-     </div>
-        </egXML> In this example, the <att>start</att> and <att>end</att> attributes give the number of the first and last token that is part of this section of a text, thus identifying the text span independent of the text format of the text.  Other possibilities for adressing a text span are available if the edition is in TEI/XML.</p>
+        <p>The <code>Manifest.xml</code> described here contains information about a set of editions
+          that are grouped here together, usually for the purpose of further description and
+          processing.</p>
+        <p>There are two main elements under the root element <gi>manifest</gi><note place="bottom"
+          >There are in fact two possible root elements, the other being <gi>manifests</gi> for a
+          grouping of <code>manifest</code> elements.</note>: <specList> <specDesc key="editions"/>
+          <specDesc key="divisions"/> </specList> </p>
+        <p>The <gi>editions</gi> element holds information about the editions that are collected
+          here. It contains <gi>edition</gi> elements, which give the details for each edition. This
+          includes also the <att>type</att>, which can be either "documentary" or "interpretative".
+          Documentary editions are editions that strive to reproduce an existing print edition,
+          while interpretative editions do reflect the views of the editor and do not follow one
+          single edition. </p>
+        <p>Other details for editions that will be collected here are the <att>id</att>, which is a
+          unique label (or identifier) used to refer to this specific edition within the manifest
+          and the processing systems. </p>
+        <p>The <gi>edition</gi> element may have the following children: <specList> <specDesc
+          key="description"/> <specDesc key="divisions"/> </specList>Both of these elements are
+          optional. <gi>description</gi> contains a description of the edition, which could be the
+          title, but also other information deemed relevant. <gi>divisions</gi> allows reference to
+          divisions within the edition. This element is repeatable and when occuring more than once
+          the edition is considered made up of the sequence of these divisions.</p>
+        <p>The <gi>divisions</gi> element can also occur as a child element of manifest, optionally
+          following the <gi>editions</gi> element. If used here, there will be only one division
+          element, which holds all subdivisions as possibly nesting <gi>div</gi> elements. The
+          purpose of this element is to provide an entry point to the editions, which is neither
+          tied to one specific edition, nor to a hyperlink or similar in a technical sense. The
+          <att>label</att> on the <gi>div</gi> elements is used to provide a human readable label
+          that can be used to point to that specific division, much the same as "Chapter 2" will
+          (usually) refer to the same section of a work, no matter which edition is used. To serve
+          as a link between this nesting structure of chapters, sections and so forth, each
+          <gi>div</gi> can have one or more <gi>edRef</gi> elements, which point to the text span in
+          one of the editions that is covering this specific section.<egXML
+          xmlns="http://www.tei-c.org/ns/Examples"> <div label="第一章"> <edRef key="KR5c0057_tls"
+          start="0" end="61"/> <edRef key="CH1a0918a_chant" start="0" end="58"/> <edRef
+          key="CH1a0918b_chant" start="2" end="402"/> </div> </egXML> In this example, the
+          <att>start</att> and <att>end</att> attributes give the number of the first and last token
+          that is part of this section of a text, thus identifying the text span independent of the
+          text format of the text. Other possibilities for adressing a text span are available if
+          the edition is in TEI/XML.</p>
       </div>
       <div>
         <head>The elements defined for the Manifest</head>
-      <schemaSpec ident="KRXManifest" start="manifest manifests" ns="http://kanripo.org/ns/KRX/Manifest/1.0" prefix="krx_" targetLang="en" docLang="en">
-      <desc>A schema for Manifest files in the KanripoX project</desc>
-        <moduleSpec ident="KRXManifest"/>
-        <elementSpec ident="manifests" module="KRXManifest">
-          <desc>Root for manifests that contain multiple manifest elements.</desc>
-          <content>
-            <elementRef key="manifest" maxOccurs="unbounded"/>
-          </content>
-        </elementSpec>
-        <elementSpec ident="manifest" module="KRXManifest">
-          <desc>The root of the manifest.  One manifest describes one work.</desc>
-          <content>
-            <sequence>
-              <elementRef key="title" minOccurs="0"/>
-              <elementRef key="description"/>
-              <elementRef key="editions"/>
-              <elementRef key="divisions" minOccurs="0"/>
-            </sequence>
-          </content>
-          <attList>
-            <attDef ident="xml:id" usage="opt">
-              <desc>The identifier of the work. This will be used to refer to this manifest from the display of this text.</desc>
-              <datatype>
-                <dataRef name="ID"/>
-              </datatype>
-            </attDef>          
-          </attList>
-          <remarks><p>Currently, only one work can be described per one manifest file.  Need to think about what to do with use cases that need multiple works. Use several <gi>manifest</gi> in a file? </p></remarks>
-        </elementSpec>
-        <elementSpec ident="title" module="KRXManifest">
-          <desc>Title of the work.</desc>
-          <content><textNode/></content>
-        </elementSpec>
-        <elementSpec ident="description"  module="KRXManifest">
-          <desc>Description of the edition or item this element is attached to.</desc>
-          <content>
+        <schemaSpec ident="KRXManifest" start="manifest manifests"
+          ns="http://kanripo.org/ns/KRX/Manifest/1.0" prefix="krx_" targetLang="en" docLang="en">
+          <desc>A schema for Manifest files in the KanripoX project</desc>
+          <moduleSpec ident="KRXManifest"/>
+          <elementSpec ident="manifests" module="KRXManifest">
+            <desc>Root for manifests that contain multiple manifest elements.</desc>
+            <content>
+              <elementRef key="manifest" maxOccurs="unbounded"/>
+            </content>
+          </elementSpec>
+          <elementSpec ident="manifest" module="KRXManifest">
+            <desc>The root of the manifest. One manifest describes one work.</desc>
+            <content>
+              <sequence>
+                <elementRef key="title" minOccurs="0"/>
+                <elementRef key="description"/>
+                <elementRef key="editions"/>
+                <elementRef key="divisions" minOccurs="0"/>
+              </sequence>
+            </content>
+            <attList>
+              <attDef ident="xml:id" usage="opt">
+                <desc>The identifier of the work. This will be used to refer to this manifest from
+                  the display of this text.</desc>
+                <datatype>
+                  <dataRef name="ID"/>
+                </datatype>
+              </attDef>
+            </attList>
+            <remarks>
+              <p>Currently, only one work can be described per one manifest file. Need to think
+                about what to do with use cases that need multiple works. Use several
+                <gi>manifest</gi> in a file? </p>
+            </remarks>
+          </elementSpec>
+          <elementSpec ident="title" module="KRXManifest">
+            <desc>Title of the work.</desc>
+            <content>
+              <textNode/>
+            </content>
+          </elementSpec>
+          <elementSpec ident="description" module="KRXManifest">
+            <desc>Description of the edition or item this element is attached to.</desc>
+            <content>
               <alternate minOccurs="0" maxOccurs="unbounded">
-              <textNode/>                
-              <elementRef key="note" minOccurs="0"/>
+                <textNode/>
+                <elementRef key="note" minOccurs="0"/>
+                <elementRef key="title" minOccurs="0"/>
+                <elementRef key="creation" minOccurs="0"/>
               </alternate>
-          </content>
-        </elementSpec>
-<elementSpec ident="editions"  module="KRXManifest">
-          <desc>The editions representing the work under consideration.  Work is taken in a very broad sense here.</desc>
-          <content>
-            <alternate>
-              <elementRef key="editionGroup" minOccurs="1" maxOccurs="unbounded"/>
+            </content>
+          </elementSpec>
+          <elementSpec ident="editions" module="KRXManifest">
+            <desc>The editions representing the work under consideration. Work is taken in a very
+              broad sense here.</desc>
+            <content>
+              <alternate>
+                <elementRef key="editionGroup" minOccurs="1" maxOccurs="unbounded"/>
+                <elementRef key="edition" minOccurs="1" maxOccurs="unbounded"/>
+              </alternate>
+            </content>
+          </elementSpec>
+          <elementSpec ident="editionGroup" module="KRXManifest">
+            <desc>A group of the editions representing the work under consideration.</desc>
+            <content>
               <elementRef key="edition" minOccurs="1" maxOccurs="unbounded"/>
-            </alternate>
-          </content>          
-        </elementSpec>        
-        <elementSpec ident="editionGroup"  module="KRXManifest">
-          <desc>A group of the editions representing the work under consideration.</desc>
-          <content>
-            <elementRef key="edition" minOccurs="1" maxOccurs="unbounded"/>
-          </content>
-          <attList>
-            <attDef ident="type" usage="req">
-              <desc>The treatment of the editions within this group are based on the value of this attribute.</desc>
+            </content>
+            <attList>
+              <attDef ident="type" usage="req">
+                <desc>The treatment of the editions within this group are based on the value of this
+                  attribute.</desc>
                 <valList type="closed">
                   <valItem ident="root">
                     <desc>The root text of this work.</desc>
@@ -116,42 +146,49 @@
                     <desc>Translations of the text and / or commentary.</desc>
                   </valItem>
                   <valItem ident="other">
-                    <desc>Texts, that are grouped with this texts for some reason other than being textually related. </desc>
+                    <desc>Texts, that are grouped with this texts for some reason other than being
+                      textually related. </desc>
                   </valItem>
                 </valList>
-            </attDef>
-            <attDef ident="sigle" usage="opt">
-              <desc>A short identifier used to identify this group of editions.</desc>
-              <datatype>
-                <dataRef name="string"/>
-              </datatype>
-            </attDef>
-          </attList>
-        </elementSpec>
-        <elementSpec ident="edition"  module="KRXManifest">
-          <desc>One edition of the work. If there are multiple <gi>divisions</gi>, this indicates that the sequence of these divisions make up the work.</desc>
-          <content>
-            <sequence>
-             <elementRef key="description"/>
-             <elementRef key="tokenmap" minOccurs="0" maxOccurs="1"/> 
-             <elementRef key="divisions" minOccurs="0" maxOccurs="unbounded"/> 
-            </sequence>  
-          </content>
-          <attList>
-            <attDef ident="xml:id" usage="opt">
-              <desc>The identifier of the work. This will be used to refer to this manifest from the display of this text.</desc>
-              <datatype>
-                <dataRef name="ID"/>
-              </datatype>
-            </attDef>          
-            <attDef ident="id" usage="req">
-              <desc>The identifier of the edition.  This is required and has to be unique within this manifest. It will be used by the processing tools to refer to this edition.</desc>
-              <datatype>
-                <dataRef name="ID"/>
-              </datatype>
-            </attDef>
-            <attDef ident="format" usage="req">
-              <desc>The parsing tool is selected based on the format given here, there are two formats defined at the moment. Additional formats can be added, but require a plugin to parse them.</desc>
+              </attDef>
+              <attDef ident="sigle" usage="opt">
+                <desc>A short identifier used to identify this group of editions.</desc>
+                <datatype>
+                  <dataRef name="string"/>
+                </datatype>
+              </attDef>
+            </attList>
+          </elementSpec>
+          <elementSpec ident="edition" module="KRXManifest">
+            <desc>One edition of the work. If there are multiple <gi>divisions</gi>, this indicates
+              that the sequence of these divisions make up the work.</desc>
+            <content>
+              <sequence>
+                <elementRef key="description"/>
+                <elementRef key="tokenmap" minOccurs="0" maxOccurs="1"/>
+                <elementRef key="divisions" minOccurs="0" maxOccurs="unbounded"/>
+              </sequence>
+            </content>
+            <attList>
+              <attDef ident="xml:id" usage="opt">
+                <desc>The identifier of the work. This will be used to refer to this manifest from
+                  the display of this text.</desc>
+                <datatype>
+                  <dataRef name="ID"/>
+                </datatype>
+              </attDef>
+              <attDef ident="id" usage="req">
+                <desc>The identifier of the edition. This is required and has to be unique within
+                  this manifest. It will be used by the processing tools to refer to this
+                  edition.</desc>
+                <datatype>
+                  <dataRef name="ID"/>
+                </datatype>
+              </attDef>
+              <attDef ident="format" usage="req">
+                <desc>The parsing tool is selected based on the format given here, there are two
+                  formats defined at the moment. Additional formats can be added, but require a
+                  plugin to parse them.</desc>
                 <valList type="closed">
                   <valItem ident="xml/TEI">
                     <desc>TEI file encoded in XML</desc>
@@ -160,209 +197,328 @@
                     <desc>Mandoku format</desc>
                   </valItem>
                 </valList>
-            </attDef>
-            <attDef ident="location" usage="req">
-              <desc>This gives either the relative path to the local folder containing the edition or a resolvable remote reference to the edition, for example on github.</desc>
-              <datatype>
-                <dataRef name="string"/>
-              </datatype>
-              <remarks><p>TODO: format for remote reference.</p><p>TODO: Format for identifying portion of text in file.</p></remarks>
-            </attDef>
-            <attDef ident="base" usage="opt">
-              <desc>The edition marked as 'base' is the reference edition for sequential reordering.</desc>
-              <valList type="closed">
-                <valItem ident="true">
-                  <desc>This edition is the reference edition</desc>
-                </valItem>
-                <valItem ident="false">
-                  <desc>Not the reference edition (default)</desc>
-                </valItem>
-              </valList>
-            </attDef>
-            <attDef ident="type" usage="req">
-              <desc>The edition has to be declared as either <soCalled>documentary</soCalled> or <soCalled>interpretative</soCalled>.</desc>
-              <valList type="closed">
-                <valItem ident="documentary">
-                  <desc>An edition that documents an existing print source as faithful as possible, without editorial changes.</desc>
-                </valItem>
-                <valItem ident="interpretative">
-                  <desc>An edition that might be based on a print source, but possibly makes editorial changes.</desc>
-                </valItem>
-              </valList>
-            </attDef>
-            <attDef ident="language">
-              <desc>The language of the document, identified with an identifier according to RFC 1766.</desc>
-              <datatype>
-                <dataRef name="language"/>
-              </datatype>
-            </attDef>
-            <attDef ident="sigle" usage="opt">
-              <desc>A short identifier used to identify this edition.</desc>
-              <datatype>
-                <dataRef name="string"/>
-              </datatype>
-            </attDef>
-          </attList>
-        </elementSpec>
-        <elementSpec ident="divisions" module="KRXManifest">
-          <desc>The internal subdivisions of the work under consideration.</desc>
-          <content>
+              </attDef>
+              <attDef ident="location" usage="req">
+                <desc>This gives either the relative path to the local folder containing the edition
+                  or a resolvable remote reference to the edition, for example on github.</desc>
+                <datatype>
+                  <dataRef name="string"/>
+                </datatype>
+                <remarks>
+                  <p>TODO: format for remote reference.</p>
+                  <p>TODO: Format for identifying portion of text in file.</p>
+                </remarks>
+              </attDef>
+              <attDef ident="base" usage="opt">
+                <desc>The edition marked as 'base' is the reference edition for sequential
+                  reordering.</desc>
+                <valList type="closed">
+                  <valItem ident="true">
+                    <desc>This edition is the reference edition</desc>
+                  </valItem>
+                  <valItem ident="false">
+                    <desc>Not the reference edition (default)</desc>
+                  </valItem>
+                </valList>
+              </attDef>
+              <attDef ident="type" usage="req">
+                <desc>The edition has to be declared as either <soCalled>documentary</soCalled> or
+                  <soCalled>interpretative</soCalled>.</desc>
+                <valList type="closed">
+                  <valItem ident="documentary">
+                    <desc>An edition that documents an existing print source as faithful as
+                      possible, without editorial changes.</desc>
+                  </valItem>
+                  <valItem ident="interpretative">
+                    <desc>An edition that might be based on a print source, but possibly makes
+                      editorial changes.</desc>
+                  </valItem>
+                </valList>
+              </attDef>
+              <attDef ident="role" usage="req">
+                <desc>One of the editions has to be declared as the base edition, the others as
+                  reference editions.</desc>
+                <valList type="closed">
+                  <valItem ident="base">
+                    <desc>This edition is the base edition.</desc>
+                  </valItem>
+                  <valItem ident="reference">
+                    <desc>All editions except the base edition are considered reference
+                      editions.</desc>
+                  </valItem>
+                </valList>
+              </attDef>
+              <attDef ident="language">
+                <desc>The language of the document, identified with an identifier according to RFC
+                  1766.</desc>
+                <datatype>
+                  <dataRef name="language"/>
+                </datatype>
+              </attDef>
+              <attDef ident="sigle" usage="opt">
+                <desc>A short identifier used to identify this edition.</desc>
+                <datatype>
+                  <dataRef name="string"/>
+                </datatype>
+              </attDef>
+            </attList>
+          </elementSpec>
+          <elementSpec ident="divisions" module="KRXManifest">
+            <desc>The internal subdivisions of the work under consideration.</desc>
+            <content>
               <elementRef key="div" minOccurs="1" maxOccurs="unbounded"/>
-          </content>          
-          <attList>
-            <attDef ident="edition" usage="opt">
-              <desc>If necessary, the edition for which these textual divisions are valid can be given here </desc>
-              <datatype>
-                <dataRef name="token"></dataRef>
-              </datatype>
-            </attDef>
-          </attList>
-        </elementSpec>
-        <elementSpec ident="div" module="KRXManifest">
-          <desc>One specific subdivision on any level. </desc>
-          <content>
-            <sequence>
-             <elementRef key="label" minOccurs="0" maxOccurs="unbounded"/>
-             <elementRef key="description" minOccurs="0"/>              
-             <elementRef key="edRef" minOccurs="0" maxOccurs="unbounded"/>
-             <elementRef key="div" minOccurs="0" maxOccurs="unbounded"/>
-            </sequence>
-          </content> 
-          <attList>
-            <attDef ident="label" usage="opt">
-              <desc>A label to identify the subdivision, can be any string, but should be unique in the manifest. This can be used to access this textual division.</desc>
-              <datatype>
-                <dataRef name="token"/>
-              </datatype>
-            </attDef>
-            <attDef ident="edition" usage="opt">
-              <desc>A reference to the edition, as defined elsewhere in this manifest.</desc>
-              <datatype>
-                <dataRef name="IDREF"/>
-              </datatype>
-            </attDef>
-            <attDef ident="sequence" usage="opt">
-              <desc>Sequencial number of this division, given in such a way that ordering by this number will produce the text in the same sequence as the base edition.</desc>
-              <datatype>
-                <dataRef name="nonNegativeInteger"/>
-              </datatype>
-            </attDef>
-            <attDef ident="start" usage="opt">
-              <desc>The sequencial number of the first token of this division in the token list.</desc>
-              <datatype>
-                <dataRef name="nonNegativeInteger"/>
-              </datatype>
-            </attDef>
-            <attDef ident="end" usage="opt">
-              <desc>The sequencial number of the last token of this division in the token list.</desc>
-              <datatype>
-                <dataRef name="nonNegativeInteger"/>
-              </datatype>
-            </attDef>
-            <attDef ident="divid" usage="opt">
-              <desc>If the source file of this edition has an identifier (usually a xml:id for this subdivision), it can be recorded here.</desc>
-              <datatype>
-                <dataRef name="token"/>
-              </datatype>
-            </attDef>
-          </attList>
-        </elementSpec>
-        <elementSpec ident="note" module="KRXManifest">
-          <desc>An additional note</desc>
-          <content>
-            <textNode/>
-          </content> 
-        </elementSpec>
-        <elementSpec ident="label" module="KRXManifest">
-          <desc>Additional label</desc>
-          <content>
-            <textNode/>
-          </content> 
-          <attList>
-            <attDef ident="language">
-              <desc>The language of the label, identified with an identifier according to RFC 1766.</desc>
-              <datatype>
-                <dataRef name="language"/>
-              </datatype>
-            </attDef>            
-          </attList>
-        </elementSpec>
-        <elementSpec ident="edRef" module="KRXManifest">
-          <desc>Reference to this subdivision in one specific edition, identified by the <code>key</code>.</desc>
-          <content>
-            <empty/>
-          </content>
-          <attList>
-            <attDef ident="start" usage="opt">
-              <desc>The sequencial number of the first token of this division in the token list.</desc>
-              <datatype>
-                <dataRef name="nonNegativeInteger"/>
-              </datatype>
-            </attDef>
-            <attDef ident="end" usage="opt">
-              <desc>The sequencial number of the last token of this division in the token list.</desc>
-              <datatype>
-                <dataRef name="nonNegativeInteger"/>
-              </datatype>
-            </attDef>
-            <attDef ident="key">
-              <desc>A reference to the edition, as defined elsewhere in this manifest.</desc>
-              <datatype>
-                <dataRef name="IDREF"/>
-              </datatype>
-            </attDef>
-            <attDef ident="timestamp">
-              <desc>The timestamp in ISO format, e.g. <code>2020-10-09T14:23:52+09:00</code>.</desc>
-              <datatype>
-                <dataRef name="dateTime"/>
-              </datatype>
-            </attDef>
-            <attDef ident="label" usage="opt">
-              <desc>A label to identify the subdivision as used in this edition. It can be any string, but should be unique in the manifest. This can be used to access this textual division.</desc>
-              <datatype>
-                <dataRef name="token"/>
-              </datatype>
-            </attDef>
-          </attList>
-        </elementSpec>
-        <elementSpec ident="tokenmap" module="KRXManifest">
-          <desc>Mappings from textual features to token types</desc>
-          <content>
-             <elementRef key="map" minOccurs="1" maxOccurs="unbounded"/>
-          </content>          
-        </elementSpec>
-        <elementSpec ident="map">
-          <desc>Map of one textual feature to a specific token type</desc>
-          <content>
-            <empty/>
-          </content>
-          <attList>
-            <attDef ident="src">
-              <desc>Element or simple matching expression (for XML texts) or regular expressions (for plain text) that identifies the textual feature</desc>
-              <datatype>
-                <dataRef name="string"/>
-              </datatype>
-            </attDef>
-            <attDef ident="tok">
-              <desc>Token type</desc>
-              <valList type="closed">
-                <valItem ident="h">
-                  <desc>Token is part of a heading</desc>
-                </valItem>
-                <valItem ident="p">
-                  <desc>Token is part of a paragraph</desc>
-                </valItem>
-                <valItem ident="n">
-                  <desc>Token is part of a note or annotation of any kind</desc>
-                </valItem>
-                <valItem ident="q">
-                  <desc>Token is part of a quotation</desc>
-                </valItem>
-              </valList>
-            </attDef>
-          </attList>
-        </elementSpec>
-      </schemaSpec>
+            </content>
+            <attList>
+              <attDef ident="edition" usage="opt">
+                <desc>If necessary, the edition for which these textual divisions are valid can be
+                  given here </desc>
+                <datatype>
+                  <dataRef name="token"/>
+                </datatype>
+              </attDef>
+            </attList>
+          </elementSpec>
+          <elementSpec ident="div" module="KRXManifest">
+            <desc>One specific subdivision on any level. </desc>
+            <content>
+              <sequence>
+                <elementRef key="label" minOccurs="0" maxOccurs="unbounded"/>
+                <elementRef key="description" minOccurs="0"/>
+                <elementRef key="edRef" minOccurs="0" maxOccurs="unbounded"/>
+                <elementRef key="div" minOccurs="0" maxOccurs="unbounded"/>
+              </sequence>
+            </content>
+            <attList>
+              <attDef ident="label" usage="opt">
+                <desc>A label to identify the subdivision, can be any string, but should be unique
+                  in the manifest. This can be used to access this textual division.</desc>
+                <datatype>
+                  <dataRef name="token"/>
+                </datatype>
+              </attDef>
+              <attDef ident="edition" usage="opt">
+                <desc>A reference to the edition, as defined elsewhere in this manifest.</desc>
+                <datatype>
+                  <dataRef name="IDREF"/>
+                </datatype>
+              </attDef>
+              <attDef ident="sequence" usage="opt">
+                <desc>Sequencial number of this division, given in such a way that ordering by this
+                  number will produce the text in the same sequence as the base edition.</desc>
+                <datatype>
+                  <dataRef name="nonNegativeInteger"/>
+                </datatype>
+              </attDef>
+              <attDef ident="start" usage="opt">
+                <desc>The sequencial number of the first token of this division in the token
+                  list.</desc>
+                <datatype>
+                  <dataRef name="nonNegativeInteger"/>
+                </datatype>
+              </attDef>
+              <attDef ident="end" usage="opt">
+                <desc>The sequencial number of the last token of this division in the token
+                  list.</desc>
+                <datatype>
+                  <dataRef name="nonNegativeInteger"/>
+                </datatype>
+              </attDef>
+              <attDef ident="divid" usage="opt">
+                <desc>If the source file of this edition has an identifier (usually a xml:id for
+                  this subdivision), it can be recorded here.</desc>
+                <datatype>
+                  <dataRef name="token"/>
+                </datatype>
+              </attDef>
+            </attList>
+          </elementSpec>
+          <elementSpec ident="note" module="KRXManifest">
+            <desc>An additional note</desc>
+            <content>
+              <textNode/>
+            </content>
+          </elementSpec>
+          <elementSpec ident="label" module="KRXManifest">
+            <desc>Additional label</desc>
+            <content>
+              <textNode/>
+            </content>
+            <attList>
+              <attDef ident="language">
+                <desc>The language of the label, identified with an identifier according to RFC
+                  1766.</desc>
+                <datatype>
+                  <dataRef name="language"/>
+                </datatype>
+              </attDef>
+            </attList>
+          </elementSpec>
+          <elementSpec ident="edRef" module="KRXManifest">
+            <desc>Reference to this subdivision in one specific edition, identified by the
+              <code>key</code>.</desc>
+            <content>
+              <empty/>
+            </content>
+            <attList>
+              <attDef ident="start" usage="opt">
+                <desc>The sequencial number of the first token of this division in the token
+                  list.</desc>
+                <datatype>
+                  <dataRef name="nonNegativeInteger"/>
+                </datatype>
+              </attDef>
+              <attDef ident="end" usage="opt">
+                <desc>The sequencial number of the last token of this division in the token
+                  list.</desc>
+                <datatype>
+                  <dataRef name="nonNegativeInteger"/>
+                </datatype>
+              </attDef>
+              <attDef ident="key">
+                <desc>A reference to the edition, as defined elsewhere in this manifest.</desc>
+                <datatype>
+                  <dataRef name="IDREF"/>
+                </datatype>
+              </attDef>
+              <attDef ident="timestamp">
+                <desc>The timestamp in ISO format, e.g.
+                  <code>2020-10-09T14:23:52+09:00</code>.</desc>
+                <datatype>
+                  <dataRef name="dateTime"/>
+                </datatype>
+              </attDef>
+              <attDef ident="label" usage="opt">
+                <desc>A label to identify the subdivision as used in this edition. It can be any
+                  string, but should be unique in the manifest. This can be used to access this
+                  textual division.</desc>
+                <datatype>
+                  <dataRef name="token"/>
+                </datatype>
+              </attDef>
+            </attList>
+          </elementSpec>
+          <elementSpec ident="tokenmap" module="KRXManifest">
+            <desc>Mappings from textual features to token types</desc>
+            <content>
+              <elementRef key="map" minOccurs="1" maxOccurs="unbounded"/>
+            </content>
+          </elementSpec>
+          <elementSpec ident="map">
+            <desc>Map of one textual feature to a specific token type</desc>
+            <content>
+              <empty/>
+            </content>
+            <attList>
+              <attDef ident="src">
+                <desc>Element or simple matching expression (for XML texts) or regular expressions
+                  (for plain text) that identifies the textual feature</desc>
+                <datatype>
+                  <dataRef name="string"/>
+                </datatype>
+              </attDef>
+              <attDef ident="tok">
+                <desc>Token type</desc>
+                <valList type="closed">
+                  <valItem ident="h">
+                    <desc>Token is part of a heading</desc>
+                  </valItem>
+                  <valItem ident="p">
+                    <desc>Token is part of a paragraph</desc>
+                  </valItem>
+                  <valItem ident="n">
+                    <desc>Token is part of a note or annotation of any kind</desc>
+                  </valItem>
+                  <valItem ident="q">
+                    <desc>Token is part of a quotation</desc>
+                  </valItem>
+                  <valItem ident="v">
+                    <desc>Token is part of a verse line</desc>
+                  </valItem>
+                </valList>
+              </attDef>
+            </attList>
+          </elementSpec>
+          <elementSpec ident="creation" module="KRXManifest">
+            <desc>Information about the creation</desc>
+            <content>
+              <alternate>
+                <elementRef key="title"/>
+                <elementRef key="date"/>
+                <elementRef key="resp"/>
+              </alternate>
+            </content>
+          </elementSpec>
+          <elementSpec ident="title" module="KRXManifest">
+            <desc>Title of the work</desc>
+            <content>
+              <textNode/>
+            </content>
+          </elementSpec>
+          <elementSpec ident="date" module="KRXManifest">
+            <desc>Date of the work</desc>
+            <content>
+              <textNode/>
+            </content>
+            <attList>
+              <attDef ident="notbefore">
+                <desc>Earliest possible date</desc>
+                <datatype>
+                  <dataRef name="string"/>
+                </datatype>
+              </attDef>
+              <attDef ident="notafter">
+                <desc>Latest possible date</desc>
+                <datatype>
+                  <dataRef name="string"/>
+                </datatype>
+              </attDef>
+              <attDef ident="cert">
+                <desc>Degree of certainty of this assertion</desc>
+                <valList type="closed">
+                  <valItem ident="high">
+                    <desc>High degree of certainty</desc>
+                  </valItem>
+                  <valItem ident="middle">
+                    <desc>Middle degree of certainty</desc>
+                  </valItem>
+                  <valItem ident="low">
+                    <desc>Low degree of certainty</desc>
+                  </valItem>
+                </valList>
+              </attDef>
+            </attList>
+          </elementSpec>
+          <elementSpec ident="resp" module="KRXManifest">
+            <desc>Person responsible for some aspect of the work</desc>
+            <content>
+              <textNode/>
+            </content>
+            <attList>
+              <attDef ident="role">
+                <datatype>
+                  <dataRef name="string"/>
+                </datatype>
+                <valList type="open">
+                  <valItem ident="author">
+                    <desc>Author</desc>
+                  </valItem>
+                  <valItem ident="compiler">
+                    <desc>Compiler</desc>
+                  </valItem>
+                  <valItem ident="translator">
+                    <desc>Translator</desc>
+                  </valItem>
+                </valList>
+              </attDef>
+              <attDef ident="key">
+                <desc>A key identifying this person in some reference system. </desc>
+                <datatype>
+                  <dataRef name="string"/>
+                </datatype>
+              </attDef>
+            </attList>
+          </elementSpec>
+        </schemaSpec>
       </div>
     </body>
   </text>

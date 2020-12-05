@@ -5,7 +5,7 @@
          xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://kanripo.org/ns/KRX/Token/1.0"><!--
-Schema generated from ODD source 2020-12-03T11:44:30Z. .
+Schema generated from ODD source 2020-12-05T00:47:05Z. .
 TEI Edition: Version 4.1.0. Last updated on
 	19th August 2020, revision b414ba550
 TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
@@ -20,16 +20,46 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
          <oneOrMore>
             <ref name="tx_tg"/>
          </oneOrMore>
+         <optional>
+            <attribute name="xml:id">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            </attribute>
+         </optional>
+         <attribute name="ed">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Reference to the edition defined in the manifest.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="n">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A label</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fileseq">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">If the tokens are in several files, this gives the sequential number of the file.</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <empty/>
       </element>
    </define>
    <define name="tx_tg">
       <element name="tg">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A group of tokens.</a:documentation>
          <zeroOrMore>
-            <ref name="tx_tg"/>
-         </zeroOrMore>
-         <zeroOrMore>
-            <ref name="tx_t"/>
+            <choice>
+               <zeroOrMore>
+                  <ref name="tx_tg"/>
+               </zeroOrMore>
+               <zeroOrMore>
+                  <ref name="tx_t"/>
+               </zeroOrMore>
+               <zeroOrMore>
+                  <ref name="tx_pb"/>
+               </zeroOrMore>
+               <zeroOrMore>
+                  <ref name="tx_lb"/>
+               </zeroOrMore>
+            </choice>
          </zeroOrMore>
          <optional>
             <attribute name="xml:id">
@@ -89,6 +119,54 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Label or identifier of the element in the text of which this token is part. </a:documentation>
             <data type="string"/>
          </attribute>
+         <empty/>
+      </element>
+   </define>
+   <define name="tx_pb">
+      <element name="pb">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">This element marks the beginning of a new page or page-like section on the text-bearing surface.</a:documentation>
+         <empty/>
+         <optional>
+            <attribute name="ed">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Identifier of the edition to which this page belongs</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="n">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Number or other label used to refer to this page</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="xml:id">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="tx_lb">
+      <element name="lb">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">This element marks the beginning of a new line or line-like section on the text-bearing surface.</a:documentation>
+         <empty/>
+         <optional>
+            <attribute name="ed">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Identifier of the edition to which this line belongs</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="n">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Number or other label used to refer to this line</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="xml:id">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>

@@ -29,21 +29,51 @@
         <p>The <gi>tg</gi> element holds the <gi>t</gi> elements, which have the character content of the text, one token per <gi>t</gi>. The purpose of the <gi>tg</gi> element is to group related <gi>t</gi> elements.  <gi>tg</gi> can nest, and provide thus for a rudimentary structure in the token files.</p>
       </div>
       <div>
-        <head>The elements defined for the tok files</head>
+        <head>The elements defined for the Token files</head>
       <schemaSpec ident="KRXToken" start="tlist" ns="http://kanripo.org/ns/KRX/Token/1.0" prefix="tx_" targetLang="en" docLang="en">
       <desc>A schema for Token files in the KanripoX project</desc>
         <moduleSpec ident="KRXToken"/>
         <elementSpec ident="tlist" module="KRXToken">
-          <desc>Root for manifests that may contain one or more <gi>tg</gi> elements.</desc>
+          <desc>Root for token that may contain one or more <gi>tg</gi> elements.</desc>
           <content>
             <elementRef key="tg" maxOccurs="unbounded"/>
           </content>
+          <attList>
+            <attDef ident="xml:id" usage="rec">
+              <datatype>
+                <dataRef key="ID"></dataRef>
+              </datatype>
+            </attDef>
+            <attDef ident="ed" usage="req">
+              <desc>Reference to the edition defined in the manifest.</desc>
+              <datatype>
+                <dataRef key="string"/>
+              </datatype>
+            </attDef>
+            <attDef ident="n" usage="opt">
+              <desc>A label</desc>
+              <datatype>
+                <dataRef key="string"/>
+              </datatype>
+            </attDef>
+            <attDef ident="fileseq" usage="opt">
+              <desc>If the tokens are in several files, this gives the sequential number of the file.</desc>
+              <datatype>
+                <dataRef name="nonNegativeInteger"/>
+              </datatype>
+            </attDef>
+            
+          </attList>
         </elementSpec>
         <elementSpec ident="tg" module="KRXToken">
           <desc>A group of tokens.</desc>
           <content>
+            <alternate minOccurs="0" maxOccurs="unbounded">
               <elementRef key="tg" minOccurs="0" maxOccurs="unbounded"/>
               <elementRef key="t" minOccurs="0" maxOccurs="unbounded"/>
+              <elementRef key="pb" minOccurs="0" maxOccurs="unbounded"/>
+              <elementRef key="lb" minOccurs="0" maxOccurs="unbounded"/>
+            </alternate>
           </content>
           <attList>
             <attDef ident="xml:id" usage="opt">
@@ -113,6 +143,56 @@
               <desc>Label or identifier of the element in the text of which this token is part. </desc>
               <datatype>
                 <dataRef name="string"/>
+              </datatype>
+            </attDef>
+          </attList>
+        </elementSpec>
+        <elementSpec ident="pb">
+          <desc>This element marks the beginning of a new page or page-like section on the text-bearing surface.</desc>
+          <content>
+            <empty/>
+          </content>
+          <attList>
+            <attDef ident="ed">
+              <desc>Identifier of the edition to which this page belongs</desc>
+              <datatype>
+                <dataRef name="string"/>
+              </datatype>
+            </attDef>
+            <attDef ident="n">
+              <desc>Number or other label used to refer to this page</desc>
+              <datatype>
+                <dataRef name="string"/>
+              </datatype>
+            </attDef>
+            <attDef ident="xml:id" usage="rec">
+              <datatype>
+                <dataRef key="ID"></dataRef>
+              </datatype>
+            </attDef>
+          </attList>
+        </elementSpec>
+        <elementSpec ident="lb">
+          <desc>This element marks the beginning of a new line or line-like section on the text-bearing surface.</desc>
+          <content>
+            <empty/>
+          </content>
+          <attList>
+            <attDef ident="ed">
+              <desc>Identifier of the edition to which this line belongs</desc>
+              <datatype>
+                <dataRef name="string"/>
+              </datatype>
+            </attDef>
+            <attDef ident="n">
+              <desc>Number or other label used to refer to this line</desc>
+              <datatype>
+                <dataRef name="string"/>
+              </datatype>
+            </attDef>
+            <attDef ident="xml:id" usage="rec">
+              <datatype>
+                <dataRef key="ID"></dataRef>
               </datatype>
             </attDef>
           </attList>
