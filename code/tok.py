@@ -165,8 +165,7 @@ def write_tok(tok, tok_base, step=10000, log=False):
         ofn="%s-tok-%s.xml" % (tok_base, nf)
         of=open(ofn, mode="w", encoding="utf8")
         of.write(f"""<?xml version="1.0" encoding="UTF-8"?>
-<div xml:id="{xid}" n="{n}" ed="{edid}">
-""")
+<tlist xml:id="{xid}" ed="{edid}" n="{n}" xmlns="http://kanripo.org/ns/KRX/Token/1.0"><tg>""")
         limit = min(len(tok), i+step)
         for j in range(i, limit, 1):
             t=tok[j]
@@ -179,8 +178,19 @@ def write_tok(tok, tok_base, step=10000, log=False):
             else:
                 f=""
             c = t[3][1].replace("&", "$")
-            of.write(f'<t tp="{j}" id="{t[1]}" el="{t[0]}" pos="{t[2]}"{p}{f}>{c}</t>\n')
-        of.write("</div>\n")
+            if j > 0:
+                if tok[j-1][1] != tok[j][1]:
+                    pbo = tok[j-1][1].split(".")[0]
+                    pbn = tok[j][1].split(".")[0]
+                    if pbo != pbn:
+                        of.write(f'<pb ed="{edid}" n="{pbn}"/>')
+                    if tok[j][1] == "noid.0":
+                        tgid=""
+                    else:
+                        tgid=f' xml:id="{tok[j][1]}"'
+                    of.write(f'</tg><tg{tgid}><lb ed="{edid}" n="{tok[j][1]}"/>')
+            of.write(f'<t tp="{j}" n="{t[1]}" role="{t[0]}" pos="{t[2]}"{p}{f}>{c}</t>')
+        of.write("</tg></tlist>\n")
         of.close()
 
 def maketmap(tx, txt=True):

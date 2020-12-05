@@ -126,7 +126,10 @@
           <elementSpec ident="editionGroup" module="KRXManifest">
             <desc>A group of the editions representing the work under consideration.</desc>
             <content>
+              <sequence>
+              <elementRef key="creation" minOccurs="0" maxOccurs="1"/>
               <elementRef key="edition" minOccurs="1" maxOccurs="unbounded"/>
+              </sequence>
             </content>
             <attList>
               <attDef ident="type" usage="req">
@@ -164,6 +167,7 @@
               that the sequence of these divisions make up the work.</desc>
             <content>
               <sequence>
+                <elementRef key="creation" minOccurs="0" maxOccurs="1"/>
                 <elementRef key="description"/>
                 <elementRef key="tokenmap" minOccurs="0" maxOccurs="1"/>
                 <elementRef key="divisions" minOccurs="0" maxOccurs="unbounded"/>
@@ -235,9 +239,10 @@
                   </valItem>
                 </valList>
               </attDef>
-              <attDef ident="role" usage="req">
-                <desc>One of the editions has to be declared as the base edition, the others as
+              <attDef ident="role" usage="rec">
+                <desc>One of the editions has to be declared as the base edition, the others are
                   reference editions.</desc>
+                <defaultVal>reference</defaultVal>
                 <valList type="closed">
                   <valItem ident="base">
                     <desc>This edition is the base edition.</desc>
@@ -441,17 +446,11 @@
           <elementSpec ident="creation" module="KRXManifest">
             <desc>Information about the creation</desc>
             <content>
-              <alternate>
+              <alternate minOccurs="0" maxOccurs="unbounded">
                 <elementRef key="title"/>
                 <elementRef key="date"/>
                 <elementRef key="resp"/>
               </alternate>
-            </content>
-          </elementSpec>
-          <elementSpec ident="title" module="KRXManifest">
-            <desc>Title of the work</desc>
-            <content>
-              <textNode/>
             </content>
           </elementSpec>
           <elementSpec ident="date" module="KRXManifest">

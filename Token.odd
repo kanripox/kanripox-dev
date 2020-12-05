@@ -82,6 +82,38 @@
                 <dataRef name="ID"/>
               </datatype>
             </attDef>          
+            <attDef ident="n" usage="opt">
+              <desc>A label</desc>
+              <datatype>
+                <dataRef key="string"/>
+              </datatype>
+            </attDef>
+            <attDef ident="role" usage="opt">
+              <desc>Token group type</desc>
+              <valList type="closed">
+                <valItem ident="h">
+                  <desc>Token group is a heading</desc>
+                </valItem>
+                <valItem ident="p">
+                  <desc>Token group is (part of) a paragraph</desc>
+                </valItem>
+                <valItem ident="s">
+                  <desc>Token group is a seg element</desc>
+                </valItem>
+                <valItem ident="n">
+                  <desc>Token group is (part of) a note or annotation of any kind</desc>
+                </valItem>
+                <valItem ident="q">
+                  <desc>Token group is (part of) a quotation</desc>
+                </valItem>
+                <valItem ident="v">
+                  <desc>Token group is (part of) a verse line</desc>
+                </valItem>
+                <valItem ident="o">
+                  <desc>Token group is (part of) a textual feature not in this list.</desc>
+                </valItem>
+              </valList>
+            </attDef>
           </attList>
           <remarks><p></p></remarks>
         </elementSpec>
@@ -89,7 +121,7 @@
           <desc>A token.</desc>
           <content><textNode/></content>
           <attList>
-            <attDef ident="el" usage="req">
+            <attDef ident="role" usage="req">
               <desc>Token type</desc>
               <valList type="closed">
                 <valItem ident="h">

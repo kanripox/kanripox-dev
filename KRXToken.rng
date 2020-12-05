@@ -5,7 +5,7 @@
          xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://kanripo.org/ns/KRX/Token/1.0"><!--
-Schema generated from ODD source 2020-12-05T00:47:05Z. .
+Schema generated from ODD source 2020-12-05T10:05:24Z. .
 TEI Edition: Version 4.1.0. Last updated on
 	19th August 2020, revision b414ba550
 TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
@@ -16,7 +16,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
            uri="http://www.tei-c.org/ns/1.0"/>
    <define name="tx_tlist">
       <element name="tlist">
-         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Root for manifests that may contain one or more <code xmlns="http://www.w3.org/1999/xhtml">&lt;tg&gt;</code> elements.</a:documentation>
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Root for token that may contain one or more <code xmlns="http://www.w3.org/1999/xhtml">&lt;tg&gt;</code> elements.</a:documentation>
          <oneOrMore>
             <ref name="tx_tg"/>
          </oneOrMore>
@@ -67,6 +67,32 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
                <data type="ID"/>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="n">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A label</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="role">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token group type</a:documentation>
+               <choice>
+                  <value>h</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token group is a heading</a:documentation>
+                  <value>p</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token group is (part of) a paragraph</a:documentation>
+                  <value>s</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token group is a seg element</a:documentation>
+                  <value>n</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token group is (part of) a note or annotation of any kind</a:documentation>
+                  <value>q</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token group is (part of) a quotation</a:documentation>
+                  <value>v</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token group is (part of) a verse line</a:documentation>
+                  <value>o</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token group is (part of) a textual feature not in this list.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>
@@ -74,7 +100,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
       <element name="t">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A token.</a:documentation>
          <text/>
-         <attribute name="el">
+         <attribute name="role">
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token type</a:documentation>
             <choice>
                <value>h</value>
