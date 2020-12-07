@@ -82,7 +82,7 @@ The structural divisions link an abstract notion of the divisions (books,
 chapters, sections) in a work to the addressable, machine readable locations in
 a file. At the same time, they also serve to structurally align the different
 texts at an abstract level.
-*** Link Lists (=lnk=)
+*** Link tables (=lnk=)
 
     Various types:
     - corresponding sections of text
@@ -92,27 +92,29 @@ texts at an abstract level.
     - logical structure
     - virtual anthology, excerpts
    
-**** Alignment tables:
-For every file, we will produce a file that contains the token alignments for
-all the other files, based on the ID unit of the file, this will currently
-either be <line> or <seq>, while alignments on larger units like paragraphs do
-not work very well.
+**** Nexus tables (list of related passages)
+For every text, we will produce a file that contains the token alignments for
+all the other editions, based on a textual unit. This will currently either be
+<line> or <seq>, while alignments on larger units like paragraphs do not seem to work
+very well.
 #+begin_example language=xml
-<seg id='CH1a0907_CHANT_001-4a.34' tp='462' tcount='5'>
-<ref ed='KR3a0007_SBCK' corresp='#KR3a0007_SBCK_001-2b.08' tp='1157' tcount='4' diff='1'/>
-<ref ed='KR3a0007_WYG' corresp='#KR3a0007_WYG_001-2b.03' tp='1498' tcount='4' diff='1'/>
-<ref ed='KR3a0007_master' corresp='#KR3a0007_master_001' tp='1157' tcount='4' diff='1'/>
-</seg>
-<seg id='CH1a0907_CHANT_001-4a.35' tp='467' tcount='2'>
-<ref ed='KR3a0007_SBCK' corresp='#KR3a0007_SBCK_d' tp='0' tcount='0' diff='2'/>
-<ref ed='KR3a0007_WYG' corresp='#KR3a0007_WYG_d' tp='0' tcount='0' diff='2'/>
-<ref ed='KR3a0007_master' corresp='#KR3a0007_master_d' tp='0' tcount='0' diff='2'/>
-</seg>
-<seg id='CH1a0907_CHANT_001-4a.36' tp='469' tcount='9'>
-<ref ed='KR3a0007_SBCK' corresp='#KR3a0007_SBCK_001-2b.09' tp='1161' tcount='8' diff='1'/>
-<ref ed='KR3a0007_WYG' corresp='#KR3a0007_WYG_001-2b.03' tp='1502' tcount='8' diff='1'/>
-<ref ed='KR3a0007_master' corresp='#KR3a0007_master_001' tp='1161' tcount='8' diff='1'/>
-</seg>
+<nexus xml:id='KR5c0073_tls.seg1-2' tp='3' tcount='3'>
+<locationRef ed='CH1a0918a_chant' target='CH1a0918_CHANT_001-1a.3' tp='5' tcount='3'/>
+<locationRef ed='CH1a0918b_chant' target='CH1a0918_CHANT_082-1a.8' tp='18' tcount='39'/>
+<locationRef ed='CH8x3004_chant' target='CH8x3004_CHANT_002-1a.7' tp='3051' tcount='4'/>
+<locationRef ed='CH8x3005_chant' target='CH8x3005_CHANT_001-1a.49' tp='118' tcount='3'/>
+<locationRef ed='CH8x3006_chant' target='CH8x3006_CHANT_001-1a.3' tp='2' tcount='3'/>
+<locationRef ed='CH8x3007_chant' target='CH8x3007_CHANT_002-1a.7' tp='3048' tcount='4'/>
+<locationRef ed='KR5c0057_tls' target='KR5c0057_tls_001-1a.4' tp='5' tcount='3'/>
+<locationRef ed='KX5c0045_HFL' target='KX5c0045_HFL_001-001a.03' tp='15' tcount='3'/>
+<locationRef ed='KX5c0045_ZTDZ' target='KX5c0045_SJB_001-110474b.03' tp='15' tcount='3'/>
+<locationRef ed='KX5c0046_HFL' target='KX5c0046_HFL_000-001a.03' tp='18' tcount='3'/>
+<locationRef ed='KX5c0046_ZTDZ' target='KX5c0046_SJB_000-110482a.03' tp='18' tcount='3'/>
+<locationRef ed='KX5c0065_SBCK' target='KX5c0065_SBCK_001-1a.04' tp='929' tcount='35'/>
+<locationRef ed='KX5c0065_ZTDZ' target='KX5c0065_SJB_001-120001a.04' tp='29' tcount='35'/>
+<locationRef ed='KX5c0073_HFL' target='KX5c0073_HFL_001-001a.03' tp='17' tcount='3'/>
+<locationRef ed='KX5c0073_ZTDZ' target='KX5c0073_SJB_001-120272c.03' tp='17' tcount='3'/>
+</nexus>
 #+end_example
 
 In the second example, the corresponding segment in the other texts is
@@ -124,41 +126,43 @@ dummy ID here, identified with 'd' (for deleted) in place of the text location.
 
 Annotations from the TLS project, according to the format used there.
 
-*** Collatex tokens (=tok=)
+*** Token files (=tok=)
 
-Tokenized versions of the XML files, in a format suitable to be fed to CollateX.
-These are required to produce the alignment tables.
+Tokenized versions of the XML files. These files have all the Chinese characters
+of the text files, but punctuation and other non-textual content is either
+retained in attributes, or removed. The format allows also a rudimentary form of
+structural hierarchy (nested <tg> elements) and page or line-breaks to mark
+locations in a text. For processing in nature language processing (NLP)
+application, one can simple grab all the <t> elements and work with that. These
+text files can serve as proxy for more elaborate versions of a digital text, in
+a similar way to a thumbnail works for a high-resolution image, for search or preview.
+
 #+begin_example lang=xml
-<div>[...]
-   <t tp="468" id="CH1a0907_CHANT_001-4a.35" el="p seg" pos="1">言</t>
-   <t tp="469"
-      f="，"
-      id="CH1a0907_CHANT_001-4a.35"
-      el="p seg"
-      pos="2">行</t>
-   <t tp="470" id="CH1a0907_CHANT_001-4a.36" el="p seg" pos="1">君</t>
-   <t tp="471" id="CH1a0907_CHANT_001-4a.36" el="p seg" pos="2">子</t>
-   <t tp="472" id="CH1a0907_CHANT_001-4a.36" el="p seg" pos="3">之</t>
-   <t tp="473" id="CH1a0907_CHANT_001-4a.36" el="p seg" pos="4">所</t>
-   <t tp="474" id="CH1a0907_CHANT_001-4a.36" el="p seg" pos="5">以</t>
-   <t tp="475" id="CH1a0907_CHANT_001-4a.36" el="p seg" pos="6">動</t>
-   <t tp="476" id="CH1a0907_CHANT_001-4a.36" el="p seg" pos="7">天</t>
-   <t tp="477" id="CH1a0907_CHANT_001-4a.36" el="p seg" pos="8">地</t>
-   <t tp="478"
-      f="，"
-      id="CH1a0907_CHANT_001-4a.36"
-      el="p seg"
-      pos="9">也</t>
-   <t tp="479" id="CH1a0907_CHANT_001-4a.37" el="p seg" pos="1">可</t>
-   <t tp="480" id="CH1a0907_CHANT_001-4a.37" el="p seg" pos="2">不</t>
-   <t tp="481" id="CH1a0907_CHANT_001-4a.37" el="p seg" pos="3">慎</t>
-   <t tp="482"
-      f="！』"
-      id="CH1a0907_CHANT_001-4a.37"
-      el="p seg"
-      pos="4">乎</t>
+<tlist ed="CH1a0907_CHANT" xmlns="http://kanripo.org/ns/KRX/Token/1.0">
+<tg>
+    <t tp="1" n="CH1a0907_CHANT_001-1a.1-h" role="h" pos="1">君</t>
+    <t tp="2" n="CH1a0907_CHANT_001-1a.1-h" role="h" pos="2">道</t>
+    <tg>
+        <pb ed="CH1a0907_CHANT" n="CH1a0907_CHANT_001-1a"/>
+    <t tp="3" n="CH1a0907_CHANT_001-1a.2" p="1．1" role="p" pos="1">晉</t>
+    <t tp="4" n="CH1a0907_CHANT_001-1a.2" role="p" pos="2">平</t>
+    <t tp="5" n="CH1a0907_CHANT_001-1a.2" role="p" pos="3">公</t>
+    <t tp="6" n="CH1a0907_CHANT_001-1a.2" role="p" pos="4">問</t>
+    <t tp="7" n="CH1a0907_CHANT_001-1a.2" role="p" pos="5">於</t>
+    <t tp="8" n="CH1a0907_CHANT_001-1a.2" role="p" pos="6">師</t>
+    <t tp="9" n="CH1a0907_CHANT_001-1a.2" role="p" pos="7">曠</t>
+    <t tp="10" n="CH1a0907_CHANT_001-1a.2" f="：" role="p" pos="8">曰</t>
+    </tg>
+    <tg>
+    <t tp="11" n="CH1a0907_CHANT_001-1a.3" p="「" role="p" pos="1">人</t>
+    <t tp="12" n="CH1a0907_CHANT_001-1a.3" role="p" pos="2">君</t>
+    <t tp="13" n="CH1a0907_CHANT_001-1a.3" role="p" pos="3">之</t>
+    <t tp="14" n="CH1a0907_CHANT_001-1a.3" role="p" pos="4">道</t>
+    <t tp="15" n="CH1a0907_CHANT_001-1a.3" role="p" pos="5">如</t>
+    <t tp="16" n="CH1a0907_CHANT_001-1a.3" f="？」" role="p" pos="6">何</t>
+    </tg>
 [...]
-</div>
+</tlist>
 #+end_example
 
 * Ideas
