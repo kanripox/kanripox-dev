@@ -7,6 +7,7 @@ import os, re, sys
 from collections import defaultdict
 
 krx_xmlns="{http://kanripo.org/ns/KRX/Manifest/1.0}"
+tx_xmlns="{http://kanripo.org/ns/KRX/Token/1.0}"
 
 # text type is defined on the parent of the edition element
 def get_text_type(textdir, textid):
@@ -40,13 +41,13 @@ def read_tokens(textdir):
             print ("%s/%s" % (tokd, t))
             tree = ET.parse("%s/%s" % (tokd, t))
             root = tree.getroot()
-            p=root.findall(".//t")
+            p=root.findall(f".//{tx_xmlns}t")
             for child in p:
-                if 'id' in child.attrib:
-                    ix = child.attrib['id']
+                if 'n' in child.attrib:
+                    ix = child.attrib['n']
                 else:
                     ix = "no_id"
-                t1.append((child.text, ix, int(child.attrib['tp']), child.attrib['pos'], child.attrib['el'] ))
+                t1.append((child.text, ix, int(child.attrib['tp']), child.attrib['pos'], child.attrib['role'] ))
         # adjust for realignment
         if (textid in dmap):
             sn=[]
@@ -144,6 +145,7 @@ def write_table(tseq, textdir, textid):
                         print("error,", tag, textid, l, trg, l+dx)
                         
         sdic.append(ldic)
+        kdic=defaultdict(list)
         tdic=defaultdict(list)
         for a in sdic:
             try:
@@ -167,30 +169,35 @@ def write_table(tseq, textdir, textid):
                 diff = " diff='%d'" % (df)
             else:
                 diff = ""
-            key="<seg id='%s' tp='%d' tcount='%d'>\n" % (ix, itp-1, len(a) - icount)
+            nex="<nexus xml:id='%s' tp='%d' tcount='%d'>\n" % (ix, itp, len(a) - icount)
+            if not ix in kdic:
+                kdic[ix] = nex
+            key=ix
+            if ttp < 2:
+                continue
             if tx == 'd':
-                val="<ref ed='%s' corresp='#%s_%s' tp='%d' tcount='%d'%s/>\n" % (ed, ed, tx, ttp, len(a) - dcount, diff)
+                val="<locationRef ed='%s' target='%s_%s' tp='%d' tcount='%d'/>\n" % (ed, ed, tx, ttp, len(a) - dcount)
             else:
                 try:
-                    val="<ref ed='%s' corresp='#%s' tp='%d' tcount='%d'%s/>\n" % (ed, tx, ttp-2, len(a) - dcount, diff)
+                    val="<locationRef ed='%s' target='%s' tp='%d' tcount='%d'/>\n" % (ed, tx, ttp-2, len(a) - dcount)
                 except:
                     print(ttp)
                     sys.exit()
             tdic[key].append(val)
     lnkd="%s/aux/lnk"%(textdir)
     os.makedirs(lnkd, exist_ok=True)
-    of=open("%s/%s-align-tab.xml" % (lnkd, textid), "w", encoding="utf-8" )
-    of.write("<div ed='%s'>\n" %(textid))
+    of=open("%s/%s-nexuslist.xml" % (lnkd, textid), "w", encoding="utf-8" )
+    of.write('<nexusList ed="%s" xmlns="http://kanripo.org/ns/KRX/Nexus/1.0">\n' %(textid))
     k=[fx for fx in tdic.keys()]
     try:
         k=sorted(k, key = lambda x: int(re.findall("tp='(-?[0-9]+)'", x)[0]))
     except:
         pass
     for kn in k:
-        of.write(kn)
+        of.write(kdic[kn])
         of.write("".join(tdic[kn]))
-        of.write("</seg>\n")
-    of.write("</div>\n")
+        of.write("</nexus>\n")
+    of.write("</nexusList>\n")
     of.close()
 
 
@@ -208,7 +215,7 @@ def read_align_tabs(textdir):
             tcount=seg.attrib['tcount']
             segs[segid].append((textid, segid, int(tp), int(tcount)))
             for ref in seg:
-                segs[segid].append((ref.attrib['ed'], ref.attrib['corresp'][1:], int(ref.attrib['tp']), int(ref.attrib['tcount'])))
+                segs[segid].append((ref.attrib['ed'], ref.attrib['target'], int(ref.attrib['tp']), int(ref.attrib['tcount'])))
     return segs
 
 def get_alignments(ttok, s):

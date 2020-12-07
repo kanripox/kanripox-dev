@@ -189,7 +189,11 @@ def write_tok(tok, tok_base, step=10000, log=False):
                     else:
                         tgid=f' xml:id="{tok[j][1]}"'
                     of.write(f'</tg><tg{tgid}><lb ed="{edid}" n="{tok[j][1]}"/>')
-            of.write(f'<t tp="{j}" n="{t[1]}" role="{t[0]}" pos="{t[2]}"{p}{f}>{c}</t>')
+            if t[1].startswith("noid"):
+                tn = "noid.%d" % (j)
+            else:
+                tn = t[1]
+            of.write(f'<t tp="{j}" n="{tn}" role="{t[0]}" pos="{t[2]}"{p}{f}>{c}</t>')
         of.write("</tg></tlist>\n")
         of.close()
 
