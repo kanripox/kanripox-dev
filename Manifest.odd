@@ -127,6 +127,7 @@
             <desc>A group of the editions representing the work under consideration.</desc>
             <content>
               <sequence>
+              <elementRef key="title" minOccurs="0" maxOccurs="1"/>
               <elementRef key="creation" minOccurs="0" maxOccurs="1"/>
               <elementRef key="edition" minOccurs="1" maxOccurs="unbounded"/>
               </sequence>
@@ -167,6 +168,7 @@
               that the sequence of these divisions make up the work.</desc>
             <content>
               <sequence>
+                <elementRef key="title" minOccurs="0" maxOccurs="1"/>
                 <elementRef key="creation" minOccurs="0" maxOccurs="1"/>
                 <elementRef key="description"/>
                 <elementRef key="tokenmap" minOccurs="0" maxOccurs="1"/>
@@ -447,7 +449,6 @@
             <desc>Information about the creation</desc>
             <content>
               <alternate minOccurs="0" maxOccurs="unbounded">
-                <elementRef key="title"/>
                 <elementRef key="date"/>
                 <elementRef key="resp"/>
               </alternate>

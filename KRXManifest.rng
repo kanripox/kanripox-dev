@@ -5,7 +5,7 @@
          xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://kanripo.org/ns/KRX/Manifest/1.0"><!--
-Schema generated from ODD source 2020-12-05T10:25:07Z. .
+Schema generated from ODD source 2020-12-08T05:14:25Z. .
 TEI Edition: Version 4.1.0. Last updated on
 	19th August 2020, revision b414ba550
 TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
@@ -87,6 +87,9 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A group of the editions representing the work under consideration.</a:documentation>
          <group>
             <optional>
+               <ref name="krx_title"/>
+            </optional>
+            <optional>
                <ref name="krx_creation"/>
             </optional>
             <oneOrMore>
@@ -121,6 +124,9 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
       <element name="edition">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">One edition of the work. If there are multiple <code xmlns="http://www.w3.org/1999/xhtml">&lt;divisions&gt;</code>, this indicates that the sequence of these divisions make up the work.</a:documentation>
          <group>
+            <optional>
+               <ref name="krx_title"/>
+            </optional>
             <optional>
                <ref name="krx_creation"/>
             </optional>
@@ -373,7 +379,6 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Information about the creation</a:documentation>
          <zeroOrMore>
             <choice>
-               <ref name="krx_title"/>
                <ref name="krx_date"/>
                <ref name="krx_resp"/>
             </choice>
