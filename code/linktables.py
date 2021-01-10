@@ -6,8 +6,8 @@ import xml.etree.ElementTree as ET
 import os, re, sys
 from collections import defaultdict
 
-krx_xmlns="{http://kanripo.org/ns/KRX/Manifest/1.0}"
-tx_xmlns="{http://kanripo.org/ns/KRX/Token/1.0}"
+krx_xmlns="{http://kanripo.org/ns/KRX/1.0}"
+tx_xmlns="{http://kanripo.org/ns/KRX/1.0}"
 
 # text type is defined on the parent of the edition element
 def get_text_type(textdir, textid):
@@ -187,7 +187,7 @@ def write_table(tseq, textdir, textid):
     lnkd="%s/aux/lnk"%(textdir)
     os.makedirs(lnkd, exist_ok=True)
     of=open("%s/%s-nexuslist.xml" % (lnkd, textid), "w", encoding="utf-8" )
-    of.write('<nexusList ed="%s" xmlns="http://kanripo.org/ns/KRX/Nexus/1.0">\n' %(textid))
+    of.write('<nexusList ed="%s" xmlns="http://kanripo.org/ns/KRX/1.0">\n' %(textid))
     k=[fx for fx in tdic.keys()]
     try:
         k=sorted(k, key = lambda x: int(re.findall("tp='(-?[0-9]+)'", x)[0]))

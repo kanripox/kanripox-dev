@@ -8,7 +8,7 @@ import os, json, re
 
 tei_xmlns="{http://www.tei-c.org/ns/1.0}"
 xml_xmlns="{http://www.w3.org/XML/1998/namespace}"
-krx_xmlns="{http://kanripo.org/ns/KRX/Manifest/1.0}"
+krx_xmlns="{http://kanripo.org/ns/KRX/1.0}"
 
 #kanji='\u3000\u3400-\u4DFF\u4e00-\u9FFF\uF900-\uFAFF'
 # remove space from kanji definition:
@@ -165,7 +165,7 @@ def write_tok(tok, tok_base, step=10000, log=False):
         ofn="%s-tok-%s.xml" % (tok_base, nf)
         of=open(ofn, mode="w", encoding="utf8")
         of.write(f"""<?xml version="1.0" encoding="UTF-8"?>
-<tlist xml:id="{xid}" ed="{edid}" n="{n}" xmlns="http://kanripo.org/ns/KRX/Token/1.0"><tg>""")
+<tList xml:id="{xid}" ed="{edid}" n="{n}" xmlns="http://kanripo.org/ns/KRX/1.0"><tg>""")
         limit = min(len(tok), i+step)
         for j in range(i, limit, 1):
             t=tok[j]
@@ -194,7 +194,7 @@ def write_tok(tok, tok_base, step=10000, log=False):
             else:
                 tn = t[1]
             of.write(f'<t tp="{j}" n="{tn}" role="{t[0]}" pos="{t[2]}"{p}{f}>{c}</t>')
-        of.write("</tg></tlist>\n")
+        of.write("</tg></tList>\n")
         of.close()
 
 def maketmap(tx, txt=True):

@@ -4,9 +4,9 @@ import os
 import xml.etree.ElementTree as ET
 
 tei="{http://www.tei-c.org/ns/1.0}"
-krx="{http://kanripo.org/ns/KRX/Manifest/1.0}"
+krx="{http://kanripo.org/ns/KRX/1.0}"
 stub="""<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns="http://kanripo.org/ns/KRX/Manifest/1.0">
+<manifest xmlns="http://kanripo.org/ns/KRX/1.0">
   <description></description>
   <editions>
   %s

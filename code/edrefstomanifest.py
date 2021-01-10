@@ -3,8 +3,8 @@ import xml.etree.ElementTree as ET
 import os
 import linktables
 
-krx_xmlns="{http://kanripo.org/ns/KRX/Manifest/1.0}"
-ET.register_namespace('',"http://kanripo.org/ns/KRX/Manifest/1.0")
+krx_xmlns="{http://kanripo.org/ns/KRX/1.0}"
+ET.register_namespace('',"http://kanripo.org/ns/KRX/1.0")
 textdir="."
 segs = linktables.read_align_tabs(textdir)
 
