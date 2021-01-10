@@ -218,6 +218,17 @@ def maketmap(tx, txt=True):
             nmap[r]=(rp, tk)
     return nmap
 
+def tokout(edid, loc, format, tmap, tok_base):
+    if format.startswith("txt"):
+        toq=mandoku2tok(loc, tmap)
+    elif format.startswith("xml"):
+        xmlfile=[a for a in os.listdir(loc) if a.endswith("xml") and not ("_" in a)][0]
+        toq, dv = parse2tok(f"{loc}/{xmlfile}", tmap, pel=True)
+    if len(toq) > 0:
+        write_tok(toq, tok_base, step=-1)
+        print(len(toq))
+    return
+
 def make_toks():
     mtree=ET.parse("Manifest.xml")
     if not os.path.exists("aux/tok"):
@@ -235,14 +246,7 @@ def make_toks():
                 tmap=maketmap(d.find(f"{krx_xmlns}tokenmap"), txt=d.attrib['format'].startswith("txt"))
             else:
                 tmap={}
-            if d.attrib['format'].startswith("txt"):
-                toq=mandoku2tok(loc, tmap)
-            elif d.attrib['format'].startswith("xml"):
-                xmlfile=[a for a in os.listdir(loc) if a.endswith("xml") and not ("_" in a)][0]
-                toq, dv = parse2tok(f"{loc}/{xmlfile}", tmap, pel=True)
-            if len(toq) > 0:
-                write_tok(toq, tok_base, step=-1)
-            print(len(toq))
+            tokout(edid, loc, d.attrib['format'], tmap, tok_base)
 
 
 
@@ -256,5 +260,5 @@ if __name__ == '__main__':
     #     print(len(toq))
 #    print (tok)
 #    print (divs)
-
+    
     make_toks()

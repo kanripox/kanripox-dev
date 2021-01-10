@@ -1,0 +1,765 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:tei="http://www.tei-c.org/ns/1.0"
+         xmlns:teix="http://www.tei-c.org/ns/Examples"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         ns="http://kanripo.org/ns/KRX/1.0"><!--
+Schema generated from ODD source 2021-01-10T05:19:55Z. .
+TEI Edition: Version 4.1.0. Last updated on
+	19th August 2020, revision b414ba550
+TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
+ A schema for files related to the KanripoX project 
+--><!---->
+   <sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+           prefix="tei"
+           uri="http://www.tei-c.org/ns/1.0"/>
+   <define name="krx_manifests">
+      <element name="manifests">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Root for manifests that contain multiple manifest elements.</a:documentation>
+         <oneOrMore>
+            <ref name="krx_manifest"/>
+         </oneOrMore>
+      </element>
+   </define>
+   <define name="krx_manifest">
+      <element name="manifest">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The root of the manifest. One manifest describes one work.</a:documentation>
+         <group>
+            <optional>
+               <ref name="krx_title"/>
+            </optional>
+            <ref name="krx_description"/>
+            <ref name="krx_editions"/>
+            <optional>
+               <ref name="krx_divisions"/>
+            </optional>
+         </group>
+         <optional>
+            <attribute name="xml:id">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The identifier of the work. This will be used to refer to this manifest from the display of this text.</a:documentation>
+               <data type="ID"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_title">
+      <element name="title">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Title of the work.</a:documentation>
+         <text/>
+      </element>
+   </define>
+   <define name="krx_description">
+      <element name="description">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Description of the edition or item this element is attached to.</a:documentation>
+         <zeroOrMore>
+            <choice>
+               <text/>
+               <optional>
+                  <ref name="krx_note"/>
+               </optional>
+               <optional>
+                  <ref name="krx_title"/>
+               </optional>
+               <optional>
+                  <ref name="krx_creation"/>
+               </optional>
+            </choice>
+         </zeroOrMore>
+      </element>
+   </define>
+   <define name="krx_editions">
+      <element name="editions">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The editions representing the work under consideration. Work is taken in a very broad sense here.</a:documentation>
+         <choice>
+            <oneOrMore>
+               <ref name="krx_editionGroup"/>
+            </oneOrMore>
+            <oneOrMore>
+               <ref name="krx_edition"/>
+            </oneOrMore>
+         </choice>
+      </element>
+   </define>
+   <define name="krx_editionGroup">
+      <element name="editionGroup">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A group of the editions representing the work under consideration.</a:documentation>
+         <group>
+            <optional>
+               <ref name="krx_title"/>
+            </optional>
+            <optional>
+               <ref name="krx_creation"/>
+            </optional>
+            <oneOrMore>
+               <ref name="krx_edition"/>
+            </oneOrMore>
+         </group>
+         <attribute name="type">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The treatment of the editions within this group are based on the value of this attribute.</a:documentation>
+            <choice>
+               <value>root</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The root text of this work.</a:documentation>
+               <value>root+annotation</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The root text, interspersed with commentary.</a:documentation>
+               <value>annotation</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Commentary to the root text, without repeating the text.</a:documentation>
+               <value>translation</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Translations of the text and / or commentary.</a:documentation>
+               <value>other</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Texts, that are grouped with this texts for some reason other than being textually related. </a:documentation>
+            </choice>
+         </attribute>
+         <optional>
+            <attribute name="sigle">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A short identifier used to identify this group of editions.</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_edition">
+      <element name="edition">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">One edition of the work. If there are multiple <code xmlns="http://www.w3.org/1999/xhtml">&lt;divisions&gt;</code>, this indicates that the sequence of these divisions make up the work.</a:documentation>
+         <group>
+            <optional>
+               <ref name="krx_title"/>
+            </optional>
+            <optional>
+               <ref name="krx_creation"/>
+            </optional>
+            <ref name="krx_description"/>
+            <optional>
+               <ref name="krx_tokenmap"/>
+            </optional>
+            <zeroOrMore>
+               <ref name="krx_divisions"/>
+            </zeroOrMore>
+         </group>
+         <optional>
+            <attribute name="xml:id">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The identifier of the work. This will be used to refer to this manifest from the display of this text.</a:documentation>
+               <data type="ID"/>
+            </attribute>
+         </optional>
+         <attribute name="id">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The identifier of the edition. This is required and has to be unique within this manifest. It will be used by the processing tools to refer to this edition.</a:documentation>
+            <data type="ID"/>
+         </attribute>
+         <attribute name="format">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The parsing tool is selected based on the format given here, there are two formats defined at the moment. Additional formats can be added, but require a plugin to parse them.</a:documentation>
+            <choice>
+               <value>xml/TEI</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">TEI file encoded in XML</a:documentation>
+               <value>txt/mandoku</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Mandoku format</a:documentation>
+            </choice>
+         </attribute>
+         <attribute name="location">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">This gives either the relative path to the local folder containing the edition or a resolvable remote reference to the edition, for example on github.</a:documentation>
+            <data type="string"/>
+         </attribute>
+         <optional>
+            <attribute name="base">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The edition marked as 'base' is the reference edition for sequential reordering.</a:documentation>
+               <choice>
+                  <value>true</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">This edition is the reference edition</a:documentation>
+                  <value>false</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Not the reference edition (default)</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <attribute name="type">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The edition has to be declared as either documentary or interpretative.</a:documentation>
+            <choice>
+               <value>documentary</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An edition that documents an existing print source as faithful as possible, without editorial changes.</a:documentation>
+               <value>interpretative</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An edition that might be based on a print source, but possibly makes editorial changes.</a:documentation>
+            </choice>
+         </attribute>
+         <optional>
+            <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                       name="role"
+                       a:defaultValue="reference">
+               <a:documentation>One of the editions has to be declared as the base edition, the others are reference editions.</a:documentation>
+               <choice>
+                  <value>base</value>
+                  <a:documentation>This edition is the base edition.</a:documentation>
+                  <value>reference</value>
+                  <a:documentation>All editions except the base edition are considered reference editions.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="language">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The language of the document, identified with an identifier according to RFC 1766.</a:documentation>
+               <data type="language"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="sigle">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A short identifier used to identify this edition.</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_divisions">
+      <element name="divisions">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The internal subdivisions of the work under consideration.</a:documentation>
+         <oneOrMore>
+            <ref name="krx_div"/>
+         </oneOrMore>
+         <optional>
+            <attribute name="edition">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">If necessary, the edition for which these textual divisions are valid can be given here </a:documentation>
+               <data type="token"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_div">
+      <element name="div">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">One specific subdivision on any level. </a:documentation>
+         <group>
+            <zeroOrMore>
+               <ref name="krx_label"/>
+            </zeroOrMore>
+            <optional>
+               <ref name="krx_description"/>
+            </optional>
+            <zeroOrMore>
+               <ref name="krx_edRef"/>
+            </zeroOrMore>
+            <zeroOrMore>
+               <ref name="krx_div"/>
+            </zeroOrMore>
+         </group>
+         <optional>
+            <attribute name="label">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A label to identify the subdivision, can be any string, but should be unique in the manifest. This can be used to access this textual division.</a:documentation>
+               <data type="token"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="edition">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A reference to the edition, as defined elsewhere in this manifest.</a:documentation>
+               <data type="IDREF"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="sequence">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Sequencial number of this division, given in such a way that ordering by this number will produce the text in the same sequence as the base edition.</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="start">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The sequencial number of the first token of this division in the token list.</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="end">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The sequencial number of the last token of this division in the token list.</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="divid">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">If the source file of this edition has an identifier (usually a xml:id for this subdivision), it can be recorded here.</a:documentation>
+               <data type="token"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_note">
+      <element name="note">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An additional note</a:documentation>
+         <text/>
+      </element>
+   </define>
+   <define name="krx_label">
+      <element name="label">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Additional label</a:documentation>
+         <text/>
+         <optional>
+            <attribute name="language">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The language of the label, identified with an identifier according to RFC 1766.</a:documentation>
+               <data type="language"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_edRef">
+      <element name="edRef">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Reference to this subdivision in one specific edition, identified by the .</a:documentation>
+         <empty/>
+         <optional>
+            <attribute name="start">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The sequencial number of the first token of this division in the token list.</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="end">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The sequencial number of the last token of this division in the token list.</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="key">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A reference to the edition, as defined elsewhere in this manifest.</a:documentation>
+               <data type="IDREF"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="timestamp">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The timestamp in ISO format, e.g. .</a:documentation>
+               <data type="dateTime"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="label">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A label to identify the subdivision as used in this edition. It can be any string, but should be unique in the manifest. This can be used to access this textual division.</a:documentation>
+               <data type="token"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_tokenmap">
+      <element name="tokenmap">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Mappings from textual features to token types</a:documentation>
+         <oneOrMore>
+            <ref name="krx_map"/>
+         </oneOrMore>
+      </element>
+   </define>
+   <define name="krx_map">
+      <element name="map">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Map of one textual feature to a specific token type</a:documentation>
+         <empty/>
+         <optional>
+            <attribute name="src">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Element or simple matching expression (for XML texts) or regular expressions (for plain text) that identifies the textual feature</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="tok">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token type</a:documentation>
+               <choice>
+                  <value>h</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a heading</a:documentation>
+                  <value>p</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a paragraph</a:documentation>
+                  <value>n</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a note or annotation of any kind</a:documentation>
+                  <value>q</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a quotation</a:documentation>
+                  <value>v</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a verse line</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_creation">
+      <element name="creation">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Information about the creation</a:documentation>
+         <zeroOrMore>
+            <choice>
+               <ref name="krx_date"/>
+               <ref name="krx_resp"/>
+               <ref name="krx_title"/>
+            </choice>
+         </zeroOrMore>
+      </element>
+   </define>
+   <define name="krx_date">
+      <element name="date">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Date of the work</a:documentation>
+         <text/>
+         <optional>
+            <attribute name="notbefore">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Earliest possible date</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="notafter">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Latest possible date</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="cert">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Degree of certainty of this assertion</a:documentation>
+               <choice>
+                  <value>high</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">High degree of certainty</a:documentation>
+                  <value>middle</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Middle degree of certainty</a:documentation>
+                  <value>low</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Low degree of certainty</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_resp">
+      <element name="resp">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Person responsible for some aspect of the work</a:documentation>
+         <text/>
+         <optional>
+            <attribute name="role">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+Sample values include: 1] author; 2] compiler; 3] translator</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="key">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A key identifying this person in some reference system. </a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_nexusList">
+      <element name="nexusList">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Root for Nexus that may contain one or more <code xmlns="http://www.w3.org/1999/xhtml">&lt;nexus&gt;</code> elements.</a:documentation>
+         <group>
+            <optional>
+               <ref name="krx_note"/>
+            </optional>
+            <oneOrMore>
+               <ref name="krx_nexus"/>
+            </oneOrMore>
+         </group>
+         <optional>
+            <attribute name="xml:id">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            </attribute>
+         </optional>
+         <attribute name="ed">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Reference to the edition defined in the manifest.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="n">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A label</a:documentation>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_nexus">
+      <element name="nexus">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A group of <code xmlns="http://www.w3.org/1999/xhtml">&lt;locationRef&gt;</code> elements.</a:documentation>
+         <group>
+            <zeroOrMore>
+               <ref name="krx_note"/>
+            </zeroOrMore>
+            <zeroOrMore>
+               <ref name="krx_locationRef"/>
+            </zeroOrMore>
+         </group>
+         <optional>
+            <attribute name="xml:id">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The identifier of this token group.</a:documentation>
+               <data type="ID"/>
+            </attribute>
+         </optional>
+         <attribute name="tp">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The sequencial number of the first token of this text span.</a:documentation>
+            <data type="nonNegativeInteger"/>
+         </attribute>
+         <optional>
+            <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                       name="tcount"
+                       a:defaultValue="1">
+               <a:documentation>The number of tokens that make up this text span.</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_locationRef">
+      <element name="locationRef">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Reference to a location in the token file. Optionally might hold a copy of the referenced text as a string of characters. </a:documentation>
+         <text/>
+         <attribute name="ed">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Identifier of the edition (as used in the token file)</a:documentation>
+            <data type="string"/>
+         </attribute>
+         <attribute name="tp">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The sequencial number of the first token in the token file.</a:documentation>
+            <data type="nonNegativeInteger"/>
+         </attribute>
+         <optional>
+            <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                       name="tcount"
+                       a:defaultValue="1">
+               <a:documentation>The number of tokens that make up this text span.</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <attribute name="target">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Identifier of the first token in the text span</a:documentation>
+            <data type="string"/>
+         </attribute>
+         <optional>
+            <attribute name="n">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Label or identifier for this reference.</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_tList">
+      <element name="tList">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Root for token that may contain one or more <code xmlns="http://www.w3.org/1999/xhtml">&lt;tg&gt;</code> elements.</a:documentation>
+         <oneOrMore>
+            <ref name="krx_tg"/>
+         </oneOrMore>
+         <optional>
+            <attribute name="xml:id">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            </attribute>
+         </optional>
+         <attribute name="ed">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Reference to the edition defined in the manifest.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="n">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A label</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fileseq">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">If the tokens are in several files, this gives the sequential number of the file.</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_tg">
+      <element name="tg">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A group of tokens.</a:documentation>
+         <zeroOrMore>
+            <choice>
+               <zeroOrMore>
+                  <ref name="krx_tg"/>
+               </zeroOrMore>
+               <zeroOrMore>
+                  <ref name="krx_t"/>
+               </zeroOrMore>
+               <zeroOrMore>
+                  <ref name="krx_pb"/>
+               </zeroOrMore>
+               <zeroOrMore>
+                  <ref name="krx_lb"/>
+               </zeroOrMore>
+            </choice>
+         </zeroOrMore>
+         <optional>
+            <attribute name="xml:id">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The identifier of this token group.</a:documentation>
+               <data type="ID"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="n">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A label</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="role">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token group type</a:documentation>
+               <choice>
+                  <value>h</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token group is a heading</a:documentation>
+                  <value>p</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token group is (part of) a paragraph</a:documentation>
+                  <value>s</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token group is a seg element</a:documentation>
+                  <value>n</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token group is (part of) a note or annotation of any kind</a:documentation>
+                  <value>q</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token group is (part of) a quotation</a:documentation>
+                  <value>v</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token group is (part of) a verse line</a:documentation>
+                  <value>o</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token group is (part of) a textual feature not in this list.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="position">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">position and content of marks out of line, but related to this token. The description is similar to CSS description on HTML @style: 'left:か;' would indicate a か syllable to the left of this token.</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="kundokuten">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Kundoku marks related to this token. </a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="ruby">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Pronounciation marks related to this token. </a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_t">
+      <element name="t">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A token.</a:documentation>
+         <text/>
+         <attribute name="role">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token type</a:documentation>
+            <choice>
+               <value>h</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a heading</a:documentation>
+               <value>p</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a paragraph</a:documentation>
+               <value>s</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a seg element</a:documentation>
+               <value>n</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a note or annotation of any kind</a:documentation>
+               <value>q</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a quotation</a:documentation>
+               <value>v</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a verse line</a:documentation>
+               <value>o</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Token is part of a textual feature not in this list.</a:documentation>
+            </choice>
+         </attribute>
+         <optional>
+            <attribute name="pos">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The sequencial number of this token within this element (or token type).</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <attribute name="tp">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The sequencial number of this token within the whole text.</a:documentation>
+            <data type="nonNegativeInteger"/>
+         </attribute>
+         <optional>
+            <attribute name="f">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Punctuation or other non-token text items, immediately following the token.</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="p">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Punctuation or other non-token text items, immediately preceding the token.</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <attribute name="n">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Label or identifier of the element in the text of which this token is part. If none is available, the code generating the token file should make one up on the fly.</a:documentation>
+            <data type="string"/>
+         </attribute>
+         <optional>
+            <attribute name="cp">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Codepoint of the token character.</a:documentation>
+               <data type="nonNegativeInteger"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="position">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">position and content of marks out of line, but related to this token. The description is similar to CSS description on HTML @style: 'left:か;' would indicate a か syllable to the left of this token.</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="kundokuten">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Kundoku marks related to this token. </a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="ruby">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Pronounciation marks related to this token. </a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_pb">
+      <element name="pb">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">This element marks the beginning of a new page or page-like section on the text-bearing surface.</a:documentation>
+         <empty/>
+         <optional>
+            <attribute name="ed">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Identifier of the edition to which this page belongs</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="n">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Number or other label used to refer to this page</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="xml:id">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="krx_lb">
+      <element name="lb">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">This element marks the beginning of a new line or line-like section on the text-bearing surface.</a:documentation>
+         <empty/>
+         <optional>
+            <attribute name="ed">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Identifier of the edition to which this line belongs</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="n">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Number or other label used to refer to this line</a:documentation>
+               <data type="string"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="xml:id">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <start>
+      <choice>
+         <ref name="krx_manifest"/>
+         <ref name="krx_manifests"/>
+         <ref name="krx_nexusList"/>
+         <ref name="krx_tList"/>
+      </choice>
+   </start>
+</grammar>
