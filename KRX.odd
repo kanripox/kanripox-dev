@@ -164,7 +164,7 @@
       </div>      
       <div>
         <head>Links between text passages: the nexus file</head>
-        <p>The nexus files described here describe links between locations in texts.  The links consist of references to a span of one or more consecutive characters in a text. Related links can be grouped together to form a nexus. This can be used for example to describe corresponding passages in different versions of a text.</p>
+        <p>The nexus files described here describe links between locations in texts.  The links consist of references to a span of one or more consecutive characters in a text, machine readably expressed in terms of references to the <gi>t</gi> elements in the token files. Related links can be grouped together to form a nexus. This can be used for example to describe corresponding passages in different versions of a text.</p>
         <p>The main elements under the root element <gi>nexusList</gi>are::
           <specList>
             <specDesc key="nexus"/>
@@ -172,6 +172,31 @@
           </specList>
       </p>
         <p>The <gi>nexus</gi> element holds the <gi>locationRef</gi> elements, which contain the reference information to locate the passage of the text.  The reference is expressed by pointing to a sequence of one or more tokens in a token file for the edition. </p>
+        <p>This example shows a <gi>nexus</gi> element from a nexus file for the edition with the identifier "KR5c0057_tls" in the manuscript file. 
+          the <att>tcount</att> tells us that 6 tokens are involved in this edition, the number of tokens in the other editions is given in an attribute of the same name on the <gi>locationRef</gi> elements.  Some have longer sequences, in these cases the commentary pertaining to this phrase has also been included in the parallel text.  The <att>tp</att> gives the token position, that is the sequential number of the token in the edition, from here it can be seen that in some editions, the corresponding text is not at the beginning, either because of a different sequence (as in "CH8x3004_chant" and "CH8x3007_chant") or because a preface occurs before the text proper, as in "KX5c0065_SBCK".
+          
+          <egXML xmlns="http://www.tei-c.org/ns/Examples">
+<nexus xml:id='KR5c0057_tls_001-1a.7' tp='15' tcount='6'>
+<locationRef ed='CH1a0918a_chant' target='CH1a0918_CHANT_001-1a.6' tp='14' tcount='6'/>
+<locationRef ed='CH1a0918a_other' target='CH1a0918_CHANT_001-1a.6' tp='26' tcount='7'/>
+<locationRef ed='CH1a0918b_chant' target='CH1a0918_CHANT_082-4a.3' tp='121' tcount='42'/>
+<locationRef ed='CH1a0918b_other' target='CH1a0918_CHANT_082-4a.3' tp='119' tcount='41'/>
+<locationRef ed='CH8x3004_chant' target='CH8x3004_CHANT_002-1a.15' tp='3063' tcount='7'/>
+<locationRef ed='CH8x3005_chant' target='CH8x3005_CHANT_002-1a.44' tp='5072' tcount='6'/>
+<locationRef ed='CH8x3006_chant' target='CH8x3006_CHANT_001-1a.192' tp='389' tcount='6'/>
+<locationRef ed='CH8x3007_chant' target='CH8x3007_CHANT_002-1a.19' tp='3060' tcount='7'/>
+<locationRef ed='KR5c0073_tls' target='KR5c0073_tls.seg2-1' tp='35' tcount='6'/>
+<locationRef ed='KX5c0045_HFL' target='KX5c0045_HFL_001-001a.03' tp='24' tcount='6'/>
+<locationRef ed='KX5c0045_ZTDZ' target='KX5c0045_SJB_001-110474b.03' tp='24' tcount='6'/>
+<locationRef ed='KX5c0046_HFL' target='KX5c0046_HFL_000-001a.03' tp='27' tcount='6'/>
+<locationRef ed='KX5c0046_ZTDZ' target='KX5c0046_SJB_000-110482a.03' tp='27' tcount='6'/>
+<locationRef ed='KX5c0065_SBCK' target='KX5c0065_SBCK_001-1a.06' tp='1020' tcount='38'/>
+<locationRef ed='KX5c0065_ZTDZ' target='KX5c0065_SJB_001-120001a.10' tp='119' tcount='40'/>
+<locationRef ed='KX5c0073_HFL' target='KX5c0073_HFL_001-001a.05' tp='50' tcount='6'/>
+<locationRef ed='KX5c0073_ZTDZ' target='KX5c0073_SJB_001-120272c.05' tp='50' tcount='6'/>
+</nexus>            
+          </egXML>
+        </p>
       </div>     
       <div>
         <head>Schema for Manifest, Token and Nexus</head>
