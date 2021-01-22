@@ -44,8 +44,11 @@ for tpx in ["doc", "int"]:
             tp=d[tpx]
         else:
             f1=[a for a in os.listdir(p) if a.endswith("txt")]
-            r = [a for a in open(f"{p}/{f1[0]}").readlines() if a.startswith("#+TITLE:")][0]
-            tit = r[:-1].split()[-1]
+            try:
+                r = [a for a in open(f"{p}/{f1[0]}").readlines() if a.startswith("#+TITLE:")][0]
+                tit = r[:-1].split()[-1]
+            except:
+                tit=""
             fm="txt/mandoku"
             tp=d[tpx]
         doc.append(ed_tpl % (ed, fm, p, tp, tit))

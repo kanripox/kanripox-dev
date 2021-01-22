@@ -232,7 +232,7 @@ def tokout(edid, loc, format, tmap, tok_base):
 def make_toks():
     mtree=ET.parse("Manifest.xml")
     if not os.path.exists("aux/tok"):
-        os.mkdir("aux/tok")
+        os.makedirs("aux/tok", exist_ok=True)
 
     doc = mtree.findall(f'.//{krx_xmlns}edition')
     for d in doc:

@@ -22,10 +22,11 @@
         <specList>
           <specDesc key="manifests"/>
           <specDesc key="manifest"/>
-          <specDesc key="nexusList"/>
           <specDesc key="tList"/>
+          <specDesc key="nexusList"/>
         </specList>
-          As can be seen, the <gi>manifest</gi> definitions can be grouped together into a list of <gi>manifests</gi>, thus providing two entry points for the schema for manifests, while the other two schemas define a list of <gi>nexus</gi> respectively <gi>t</gi> (token) elements, which are grouped together into lists, thus the lists provide the entry point in this case. 
+        </p><p>
+          The first two of these pertain to the manifest files; the <gi>manifest</gi> definitions can be grouped together into a list of <gi>manifests</gi>, thus providing two entry points for the schema for manifests, while the other two schemas define a list of <gi>nexus</gi> respectively <gi>t</gi> (token) elements, which are grouped together into lists, thus the lists provide the entry point in this case. 
         </p>
       </div>
       <div>
@@ -46,12 +47,34 @@
         <p>Other details for editions that will be collected here are the <att>id</att>, which is a
           unique label (or identifier) used to refer to this specific edition within the manifest
           and the processing systems. </p>
-        <p>The <gi>edition</gi> element may have the following children: <specList> <specDesc
-          key="description"/> <specDesc key="divisions"/> </specList>Both of these elements are
-          optional. <gi>description</gi> contains a description of the edition, which could be the
-          title, but also other information deemed relevant. <gi>divisions</gi> allows reference to
-          divisions within the edition. This element is repeatable and when occuring more than once
-          the edition is considered made up of the sequence of these divisions.</p>
+        <p>The <gi>edition</gi> element may have the following children: 
+          <specList> 
+            <specDesc key="title"/> 
+            <specDesc key="creation"/> 
+            <specDesc key="description"/> 
+            <specDesc key="tokenmap"/> 
+            <specDesc key="divisions"/> 
+            
+          </specList>All of these elements are
+          optional. It is useful to give a <gi>title</gi>, which will make references to this edition easier. The <gi>creation</gi> element gives role, function and date of the persons involved in creating this edition.  This should refer to the specific edition, more general information pertaining to all editions in this group can be given in the <gi>editionGroup</gi>.
+          The <gi>description</gi> contains other relevant information concerning the edition. 
+          <gi>tokenmap</gi> is a way to map features of the text to specific token attributes, details of this are given below. And finally, the
+          <gi>divisions</gi> allows reference to
+          divisions within the edition. This will record the divisions of this specific edtion, a more abstract view of editions for the whole group of texts can be given as a direct child to <gi>manifest</gi>.  If the order of the division is not the same in all divisions, they can be re-arranged here and linked to the text location.</p>
+        <p>Here is an example for an annotated versio of the Daode jing. 
+        <egXML xmlns="http://www.tei-c.org/ns/Examples">
+		<editionGroup type="annotation">
+			<edition id="KX5c0065_HFL" format="xml/TEI" location="doc/KX5c0065_HFL"
+				type="documentary" language="lzh">
+				<creation>
+					<date  notbefore="-200" notafter="-100">1st century CE</date>
+					<resp role="注">河上公</resp>
+				</creation>
+				<description>道德真經</description>
+			</edition>
+		</editionGroup>          
+        </egXML>
+        </p>
         <p>The <gi>divisions</gi> element can also occur as a child element of manifest, optionally
           following the <gi>editions</gi> element. If used here, there will be only one division
           element, which holds all subdivisions as possibly nesting <gi>div</gi> elements. The
@@ -72,6 +95,74 @@
           the edition is in TEI/XML.</p>
       </div>
       <div>
+        <head>A shadow of the text: the token file</head>
+        <p>The token files described here serve as a shadow of other digital files that more thoroughly describe the texts documented there. This relieves the token files from the burden to describe the physical appearence, structure and transmission of the text.  This information is available at any time by following the links back to these other files.  The purpose of the token files is to provide a minimal description, containing only the characters of the text in a form that allows easy comparison and alignment of multiple versions.  The function is similar to a concordance in that it provides access to the whole text, but without much of what a reader would expect to make reading (or editing) convenient, or even feasible. On the other hand, enough information should be retained to reconstruct a very basic version of the text.</p>
+        <p>The main elements under the root element <gi>tList</gi>are::
+          <specList>
+            <specDesc key="tg"/>
+            <specDesc key="t"/>
+          </specList>
+          
+      </p>
+        <p>The <gi>tg</gi> element holds the <gi>t</gi> elements, which have the character content of the text, one token per <gi>t</gi>. The purpose of the <gi>tg</gi> element is to group related <gi>t</gi> elements.  <gi>tg</gi> can nest, and provide thus for a rudimentary structure in the token files.</p>
+        <p>Here is an example of a token file, for the beginning of the Daode jing by Laozi
+          <egXML xmlns="http://www.tei-c.org/ns/Examples">
+<tList xml:id="KR5c0057_tls-tok-0000" ed="KR5c0057_tls" n="tok-0000"
+    xmlns="http://kanripo.org/ns/KRX/1.0">
+    <tg>
+        <t tp="0" n="KR5c0057_tls_001-1a.3-h" role="h" pos="1">第</t>
+        <t tp="1" n="KR5c0057_tls_001-1a.3-h" role="h" pos="2">一</t>
+        <t tp="2" n="KR5c0057_tls_001-1a.3-h" role="h" pos="3">章</t>
+    </tg>
+    <tg xml:id="KR5c0057_tls_001-1a.3">
+        <lb ed="KR5c0057_tls" n="KR5c0057_tls_001-1a.3"/>
+        <t tp="3" n="KR5c0057_tls_001-1a.3" role="p" pos="1">道</t>
+        <t tp="4" n="KR5c0057_tls_001-1a.3" role="p" pos="2">可</t>
+        <t tp="5" n="KR5c0057_tls_001-1a.3" role="p" pos="3" f="，">道</t>
+    </tg>
+    <tg xml:id="KR5c0057_tls_001-1a.4">
+        <lb ed="KR5c0057_tls" n="KR5c0057_tls_001-1a.4"/>
+        <t tp="6" n="KR5c0057_tls_001-1a.4" role="p" pos="1">非</t>
+        <t tp="7" n="KR5c0057_tls_001-1a.4" role="p" pos="2">恒</t>
+        <t tp="8" n="KR5c0057_tls_001-1a.4" role="p" pos="3" f="。">道</t>
+    </tg>
+    <tg xml:id="KR5c0057_tls_001-1a.5">
+        <lb ed="KR5c0057_tls" n="KR5c0057_tls_001-1a.5"/>
+        <t tp="9" n="KR5c0057_tls_001-1a.5" role="p" pos="1">名</t>
+        <t tp="10" n="KR5c0057_tls_001-1a.5" role="p" pos="2">可</t>
+        <t tp="11" n="KR5c0057_tls_001-1a.5" role="p" pos="3" f="，">名</t>
+    </tg>
+    <tg xml:id="KR5c0057_tls_001-1a.6">
+        <lb ed="KR5c0057_tls" n="KR5c0057_tls_001-1a.6"/>
+        <t tp="12" n="KR5c0057_tls_001-1a.6" role="p" pos="1">非</t>
+        <t tp="13" n="KR5c0057_tls_001-1a.6" role="p" pos="2">恒</t>
+        <t tp="14" n="KR5c0057_tls_001-1a.6" role="p" pos="3" f="。">名</t>
+    </tg>
+    <tg xml:id="KR5c0057_tls_001-1a.7">
+        <lb ed="KR5c0057_tls" n="KR5c0057_tls_001-1a.7"/>
+        <t tp="15" n="KR5c0057_tls_001-1a.7" role="p" pos="1">無</t>
+        <t tp="16" n="KR5c0057_tls_001-1a.7" role="p" pos="2" f="、">名</t>
+        <t tp="17" n="KR5c0057_tls_001-1a.7" role="p" pos="3">天</t>
+        <t tp="18" n="KR5c0057_tls_001-1a.7" role="p" pos="4">地</t>
+        <t tp="19" n="KR5c0057_tls_001-1a.7" role="p" pos="5">之</t>
+        <t tp="20" n="KR5c0057_tls_001-1a.7" role="p" pos="6" f="，">始</t>
+    </tg>
+    <tg xml:id="KR5c0057_tls_001-1a.8">
+        <lb ed="KR5c0057_tls" n="KR5c0057_tls_001-1a.8"/>
+        <t tp="21" n="KR5c0057_tls_001-1a.8" role="p" pos="1">有</t>
+        <t tp="22" n="KR5c0057_tls_001-1a.8" role="p" pos="2" f="、">名</t>
+        <t tp="23" n="KR5c0057_tls_001-1a.8" role="p" pos="3">萬</t>
+        <t tp="24" n="KR5c0057_tls_001-1a.8" role="p" pos="4">物</t>
+        <t tp="25" n="KR5c0057_tls_001-1a.8" role="p" pos="5">之</t>
+        <t tp="26" n="KR5c0057_tls_001-1a.8" role="p" pos="6" f="，">母</t>
+    </tg>
+  <!-- many more tokens ... -->
+</tList>            
+          </egXML>
+        </p>
+        
+      </div>      
+      <div>
         <head>Links between text passages: the nexus file</head>
         <p>The nexus files described here describe links between locations in texts.  The links consist of references to a span of one or more consecutive characters in a text. Related links can be grouped together to form a nexus. This can be used for example to describe corresponding passages in different versions of a text.</p>
         <p>The main elements under the root element <gi>nexusList</gi>are::
@@ -83,19 +174,7 @@
         <p>The <gi>nexus</gi> element holds the <gi>locationRef</gi> elements, which contain the reference information to locate the passage of the text.  The reference is expressed by pointing to a sequence of one or more tokens in a token file for the edition. </p>
       </div>     
       <div>
-        <head>A shadow of the text: the token file</head>
-        <p>The token files described here serve as a shadow of other digital files that more thoroughly describe the texts documented there. This relieves the token files from the burden to describe the physical appearence, structure and transmission of the text.  This information is available at any time by following the links back to these other files.  The purpose of the token files is to provide a minimal description, containing only the characters of the text in a form that allows easy comparison and alignment of multiple versions.  The function is similar to a concordance in that it provides access to the whole text, but without much of what a reader would expect to make reading (or editing) convenient, or even feasible. On the other hand, enough information should be retained to reconstruct a very basic version of the text.</p>
-        <p>The main elements under the root element <gi>tlist</gi>are::
-          <specList>
-            <specDesc key="tg"/>
-            <specDesc key="t"/>
-          </specList>
-          
-      </p>
-        <p>The <gi>tg</gi> element holds the <gi>t</gi> elements, which have the character content of the text, one token per <gi>t</gi>. The purpose of the <gi>tg</gi> element is to group related <gi>t</gi> elements.  <gi>tg</gi> can nest, and provide thus for a rudimentary structure in the token files.</p>
-      </div>      
-      <div>
-        <head>Schema for Manifest, Nexus and Token</head>
+        <head>Schema for Manifest, Token and Nexus</head>
         <schemaSpec ident="KRX" start="manifest manifests nexusList tList"
           ns="http://kanripo.org/ns/KRX/1.0" prefix="krx_" targetLang="en" docLang="en">
           <desc>A schema for files related to the KanripoX project</desc>
@@ -488,7 +567,6 @@
               <alternate minOccurs="0" maxOccurs="unbounded">
                 <elementRef key="date"/>
                 <elementRef key="resp"/>
-                <elementRef key="title"/>
               </alternate>
             </content>
           </elementSpec>
@@ -556,122 +634,6 @@
               </attDef>
             </attList>
           </elementSpec>
-<!-- nexus definitions -->
-        <moduleSpec ident="KRXNexus">
-        <desc>A schema for Token files in the KanripoX project</desc>
-        </moduleSpec>
-        <elementSpec ident="nexusList" module="KRXNexus">
-          <desc>Root for Nexus that may contain one or more <gi>nexus</gi> elements.</desc>
-          <content>
-            <sequence>
-              <elementRef key="note" maxOccurs="1" minOccurs="0"/>
-              <elementRef key="nexus" maxOccurs="unbounded"/>
-           </sequence>   
-          </content>
-          <attList>
-            <attDef ident="xml:id" usage="rec">
-              <datatype>
-                <dataRef key="ID"></dataRef>
-              </datatype>
-            </attDef>
-            <attDef ident="ed" usage="req">
-              <desc>Reference to the edition defined in the manifest.</desc>
-              <datatype>
-                <dataRef key="string"/>
-              </datatype>
-            </attDef>
-            <attDef ident="n" usage="opt">
-              <desc>A label</desc>
-              <datatype>
-                <dataRef key="string"/>
-              </datatype>
-            </attDef>            
-          </attList>
-        </elementSpec>
-        <elementSpec ident="nexus" module="KRXNexus">
-          <desc>A group of <gi>locationRef</gi> elements.</desc>
-          <content>
-            <sequence>
-              <elementRef key="note" minOccurs="0" maxOccurs="unbounded"/>
-              <elementRef key="locationRef" minOccurs="0" maxOccurs="unbounded"/>
-            </sequence>  
-          </content>
-          <attList>
-            <attDef ident="xml:id" usage="opt">
-              <desc>The identifier of this token group.</desc>
-              <datatype>
-                <dataRef name="ID"/>
-              </datatype>
-            </attDef>          
-            <attDef ident="tp" usage="req">
-              <desc>The sequencial number of the first token of this text span.</desc>
-              <datatype>
-                <dataRef name="nonNegativeInteger"/>
-              </datatype>
-            </attDef>
-            <attDef ident="tcount" usage="opt">
-              <desc>The number of tokens that make up this text span.</desc>
-              <datatype>
-                <dataRef name="nonNegativeInteger"></dataRef>
-              </datatype>
-              <defaultVal>1</defaultVal>
-            </attDef>
-          </attList>
-          <remarks><p></p></remarks>
-        </elementSpec>
-        <elementSpec ident="locationRef" module="KRXNexus">
-          <desc>Reference to a location in the token file. Optionally might hold a copy of the referenced text as a string of characters. </desc>
-          <content><textNode/></content>
-          <attList>
-            <attDef ident="ed" usage="req">
-              <desc>Identifier of the edition (as used in the token file)</desc>
-              <datatype>
-                <dataRef name="string"/>
-              </datatype>
-            </attDef>
-            <attDef ident="tp" usage="req">
-              <desc>The sequencial number of the first token in the token file.</desc>
-              <datatype>
-                <dataRef name="nonNegativeInteger"/>
-              </datatype>
-            </attDef>
-            <attDef ident="tcount" usage="opt">
-              <desc>The number of tokens that make up this text span.</desc>
-              <datatype>
-                <dataRef name="nonNegativeInteger"></dataRef>
-              </datatype>
-              <defaultVal>1</defaultVal>
-            </attDef>
-            <attDef ident="target" usage="req">
-              <desc>Identifier of the first token in the text span</desc>
-              <datatype>
-                <dataRef name="string"/>
-              </datatype>
-            </attDef>
-            
-            <attDef ident="n" usage="opt">
-              <desc>Label or identifier for this reference.</desc>
-              <datatype>
-                <dataRef name="string"/>
-              </datatype>
-            </attDef>
-          </attList>
-        </elementSpec>
-          <!--
-        <elementSpec ident="note">
-          <desc>Annotation or additional information concerning the role or purpose of this reference.</desc>
-          <content>
-            <textNode/>
-          </content>
-          <attList>
-            <attDef ident="xml:id" usage="rec">
-              <datatype>
-                <dataRef key="ID"></dataRef>
-              </datatype>
-            </attDef>
-          </attList>
-        </elementSpec>        
-        -->
 <!-- token definitions -->
         <moduleSpec ident="KRXToken">
         <desc>A schema for Token files in the KanripoX project</desc>          
@@ -914,6 +876,122 @@
             </attDef>
           </attList>
         </elementSpec>
+<!-- nexus definitions -->
+        <moduleSpec ident="KRXNexus">
+        <desc>A schema for Token files in the KanripoX project</desc>
+        </moduleSpec>
+        <elementSpec ident="nexusList" module="KRXNexus">
+          <desc>Root for Nexus that may contain one or more <gi>nexus</gi> elements.</desc>
+          <content>
+            <sequence>
+              <elementRef key="note" maxOccurs="1" minOccurs="0"/>
+              <elementRef key="nexus" maxOccurs="unbounded"/>
+           </sequence>   
+          </content>
+          <attList>
+            <attDef ident="xml:id" usage="rec">
+              <datatype>
+                <dataRef key="ID"></dataRef>
+              </datatype>
+            </attDef>
+            <attDef ident="ed" usage="req">
+              <desc>Reference to the edition defined in the manifest.</desc>
+              <datatype>
+                <dataRef key="string"/>
+              </datatype>
+            </attDef>
+            <attDef ident="n" usage="opt">
+              <desc>A label</desc>
+              <datatype>
+                <dataRef key="string"/>
+              </datatype>
+            </attDef>            
+          </attList>
+        </elementSpec>
+        <elementSpec ident="nexus" module="KRXNexus">
+          <desc>A group of <gi>locationRef</gi> elements.</desc>
+          <content>
+            <sequence>
+              <elementRef key="note" minOccurs="0" maxOccurs="unbounded"/>
+              <elementRef key="locationRef" minOccurs="0" maxOccurs="unbounded"/>
+            </sequence>  
+          </content>
+          <attList>
+            <attDef ident="xml:id" usage="opt">
+              <desc>The identifier of this token group.</desc>
+              <datatype>
+                <dataRef name="ID"/>
+              </datatype>
+            </attDef>          
+            <attDef ident="tp" usage="req">
+              <desc>The sequencial number of the first token of this text span.</desc>
+              <datatype>
+                <dataRef name="nonNegativeInteger"/>
+              </datatype>
+            </attDef>
+            <attDef ident="tcount" usage="opt">
+              <desc>The number of tokens that make up this text span.</desc>
+              <datatype>
+                <dataRef name="nonNegativeInteger"></dataRef>
+              </datatype>
+              <defaultVal>1</defaultVal>
+            </attDef>
+          </attList>
+          <remarks><p></p></remarks>
+        </elementSpec>
+        <elementSpec ident="locationRef" module="KRXNexus">
+          <desc>Reference to a location in the token file. Optionally might hold a copy of the referenced text as a string of characters. </desc>
+          <content><textNode/></content>
+          <attList>
+            <attDef ident="ed" usage="req">
+              <desc>Identifier of the edition (as used in the token file)</desc>
+              <datatype>
+                <dataRef name="string"/>
+              </datatype>
+            </attDef>
+            <attDef ident="tp" usage="req">
+              <desc>The sequencial number of the first token in the token file.</desc>
+              <datatype>
+                <dataRef name="nonNegativeInteger"/>
+              </datatype>
+            </attDef>
+            <attDef ident="tcount" usage="opt">
+              <desc>The number of tokens that make up this text span.</desc>
+              <datatype>
+                <dataRef name="nonNegativeInteger"></dataRef>
+              </datatype>
+              <defaultVal>1</defaultVal>
+            </attDef>
+            <attDef ident="target" usage="req">
+              <desc>Identifier of the first token in the text span</desc>
+              <datatype>
+                <dataRef name="string"/>
+              </datatype>
+            </attDef>
+            
+            <attDef ident="n" usage="opt">
+              <desc>Label or identifier for this reference.</desc>
+              <datatype>
+                <dataRef name="string"/>
+              </datatype>
+            </attDef>
+          </attList>
+        </elementSpec>
+          <!--
+        <elementSpec ident="note">
+          <desc>Annotation or additional information concerning the role or purpose of this reference.</desc>
+          <content>
+            <textNode/>
+          </content>
+          <attList>
+            <attDef ident="xml:id" usage="rec">
+              <datatype>
+                <dataRef key="ID"></dataRef>
+              </datatype>
+            </attDef>
+          </attList>
+        </elementSpec>        
+        -->
                 
         </schemaSpec>
         
