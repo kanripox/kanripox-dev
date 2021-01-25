@@ -39,8 +39,8 @@
           grouping of <code>manifest</code> elements.</note>: <specList> <specDesc key="editions"/>
           <specDesc key="divisions"/> </specList> </p>
         <p>The <gi>editions</gi> element holds information about the editions that are collected
-          here. It contains <gi>edition</gi> elements, which give the details for each edition. This
-          includes also the <att>type</att>, which can be either "documentary" or "interpretative".
+          here. It may contain either <gi>editionGroup</gi> elements (which hold <gi>edition</gi> elements), or directly contain <gi>edition</gi> elements, which give the details for each edition. This
+          includes also the <att>type</att>, which will be either "documentary" or "interpretative".
           Documentary editions are editions that strive to reproduce an existing print edition,
           while interpretative editions do reflect the views of the editor and do not follow one
           single edition. </p>
@@ -61,7 +61,7 @@
           <gi>tokenmap</gi> is a way to map features of the text to specific token attributes, details of this are given below. And finally, the
           <gi>divisions</gi> allows reference to
           divisions within the edition. This will record the divisions of this specific edtion, a more abstract view of editions for the whole group of texts can be given as a direct child to <gi>manifest</gi>.  If the order of the division is not the same in all divisions, they can be re-arranged here and linked to the text location.</p>
-        <p>Here is an example for an annotated versio of the Daode jing. 
+        <p>Here is an example for an annotated version of the Daode jing: 
         <egXML xmlns="http://www.tei-c.org/ns/Examples">
 		<editionGroup type="annotation">
 			<edition id="KX5c0065_HFL" format="xml/TEI" location="doc/KX5c0065_HFL"
@@ -96,7 +96,7 @@
       </div>
       <div>
         <head>A shadow of the text: the token file</head>
-        <p>The token files described here serve as a shadow of other digital files that more thoroughly describe the texts documented there. This relieves the token files from the burden to describe the physical appearence, structure and transmission of the text.  This information is available at any time by following the links back to these other files.  The purpose of the token files is to provide a minimal description, containing only the characters of the text in a form that allows easy comparison and alignment of multiple versions.  The function is similar to a concordance in that it provides access to the whole text, but without much of what a reader would expect to make reading (or editing) convenient, or even feasible. On the other hand, enough information should be retained to reconstruct a very basic version of the text.</p>
+        <p>The token files described here serve as a shadow of other digital files that more thoroughly describe the texts documented there. This relieves the token files from the burden to describe the physical appearence, structure and transmission of the text.  This information is available at any time by following the links back to these other files.  The purpose of the token files is to provide a minimal description, containing only the characters of the text in a form that allows easy comparison and alignment of multiple versions and a very minimal hierarchical structure if necessary.  The function is similar to a concordance in that it provides access to the whole text, but without much of what a reader would expect to make reading (or editing) convenient, or even feasible. On the other hand, enough information should be retained to reconstruct a very basic version of the text.</p>
         <p>The main elements under the root element <gi>tList</gi>are::
           <specList>
             <specDesc key="tg"/>
@@ -105,7 +105,7 @@
           
       </p>
         <p>The <gi>tg</gi> element holds the <gi>t</gi> elements, which have the character content of the text, one token per <gi>t</gi>. The purpose of the <gi>tg</gi> element is to group related <gi>t</gi> elements.  <gi>tg</gi> can nest, and provide thus for a rudimentary structure in the token files.</p>
-        <p>Here is an example of a token file, for the beginning of the Daode jing by Laozi
+        <p>Here is an example of a token file, for the beginning of the Daode jing by Laozi:
           <egXML xmlns="http://www.tei-c.org/ns/Examples">
 <tList xml:id="KR5c0057_tls-tok-0000" ed="KR5c0057_tls" n="tok-0000"
     xmlns="http://kanripo.org/ns/KRX/1.0">
@@ -202,9 +202,9 @@
         <head>Schema for Manifest, Token and Nexus</head>
         <schemaSpec ident="KRX" start="manifest manifests nexusList tList"
           ns="http://kanripo.org/ns/KRX/1.0" prefix="krx_" targetLang="en" docLang="en">
-          <desc>A schema for files related to the KanripoX project</desc>
+          <desc>A schema for files related to the KanripoX project.</desc>
           <moduleSpec ident="KRXManifest">
-            <desc>The elements defined for the Manifest</desc>
+            <desc>The elements defined for the Manifest.</desc>
           </moduleSpec>
           <elementSpec ident="manifests" module="KRXManifest">
             <desc>Root for manifests that contain multiple manifest elements.</desc>
@@ -306,7 +306,7 @@
           </elementSpec>
           <elementSpec ident="edition" module="KRXManifest">
             <desc>One edition of the work. If there are multiple <gi>divisions</gi>, this indicates
-              that the sequence of these divisions make up the work.</desc>
+              the sequence of these divisions make up the work.</desc>
             <content>
               <sequence>
                 <elementRef key="title" minOccurs="0" maxOccurs="1"/>
@@ -338,10 +338,10 @@
                   plugin to parse them.</desc>
                 <valList type="closed">
                   <valItem ident="xml/TEI">
-                    <desc>TEI file encoded in XML</desc>
+                    <desc>TEI file encoded in XML.</desc>
                   </valItem>
                   <valItem ident="txt/mandoku">
-                    <desc>Mandoku format</desc>
+                    <desc>Mandoku format.</desc>
                   </valItem>
                 </valList>
               </attDef>
@@ -361,10 +361,10 @@
                   reordering.</desc>
                 <valList type="closed">
                   <valItem ident="true">
-                    <desc>This edition is the reference edition</desc>
+                    <desc>This edition is the reference edition.</desc>
                   </valItem>
                   <valItem ident="false">
-                    <desc>Not the reference edition (default)</desc>
+                    <desc>This edition is not the reference edition (default).</desc>
                   </valItem>
                 </valList>
               </attDef>
@@ -419,7 +419,7 @@
             <attList>
               <attDef ident="edition" usage="opt">
                 <desc>If necessary, the edition for which these textual divisions are valid can be
-                  given here </desc>
+                  given here.</desc>
                 <datatype>
                   <dataRef name="token"/>
                 </datatype>
@@ -481,13 +481,13 @@
             </attList>
           </elementSpec>
           <elementSpec ident="note" module="KRXManifest">
-            <desc>An additional note</desc>
+            <desc>An additional note.</desc>
             <content>
               <textNode/>
             </content>
           </elementSpec>
           <elementSpec ident="label" module="KRXManifest">
-            <desc>Additional label</desc>
+            <desc>Additional label.</desc>
             <content>
               <textNode/>
             </content>
@@ -546,38 +546,38 @@
             </attList>
           </elementSpec>
           <elementSpec ident="tokenmap" module="KRXManifest">
-            <desc>Mappings from textual features to token types</desc>
+            <desc>Mappings from textual features to token types.</desc>
             <content>
               <elementRef key="map" minOccurs="1" maxOccurs="unbounded"/>
             </content>
           </elementSpec>
           <elementSpec ident="map">
-            <desc>Map of one textual feature to a specific token type</desc>
+            <desc>Map of one textual feature to a specific token type.</desc>
             <content>
               <empty/>
             </content>
             <attList>
               <attDef ident="src">
                 <desc>Element or simple matching expression (for XML texts) or regular expressions
-                  (for plain text) that identifies the textual feature</desc>
+                  (for plain text) that identifies the textual feature.</desc>
                 <datatype>
                   <dataRef name="string"/>
                 </datatype>
               </attDef>
               <attDef ident="tok">
-                <desc>Token type</desc>
+                <desc>Token type.</desc>
                 <valList type="closed">
                   <valItem ident="h">
-                    <desc>Token is part of a heading</desc>
+                    <desc>Token is part of a heading.</desc>
                   </valItem>
                   <valItem ident="p">
-                    <desc>Token is part of a paragraph</desc>
+                    <desc>Token is part of a paragraph.</desc>
                   </valItem>
                   <valItem ident="n">
-                    <desc>Token is part of a note or annotation of any kind</desc>
+                    <desc>Token is part of a note or annotation of any kind.</desc>
                   </valItem>
                   <valItem ident="q">
-                    <desc>Token is part of a quotation</desc>
+                    <desc>Token is part of a quotation.</desc>
                   </valItem>
                   <valItem ident="v">
                     <desc>Token is part of a verse line</desc>
@@ -587,7 +587,7 @@
             </attList>
           </elementSpec>
           <elementSpec ident="creation" module="KRXManifest">
-            <desc>Information about the creation</desc>
+            <desc>Information about the creation: date and responsible agent.</desc>
             <content>
               <alternate minOccurs="0" maxOccurs="unbounded">
                 <elementRef key="date"/>
@@ -596,41 +596,41 @@
             </content>
           </elementSpec>
           <elementSpec ident="date" module="KRXManifest">
-            <desc>Date of the work</desc>
+            <desc>Date of the work.</desc>
             <content>
               <textNode/>
             </content>
             <attList>
               <attDef ident="notbefore">
-                <desc>Earliest possible date</desc>
+                <desc>Earliest possible date.</desc>
                 <datatype>
                   <dataRef name="string"/>
                 </datatype>
               </attDef>
               <attDef ident="notafter">
-                <desc>Latest possible date</desc>
+                <desc>Latest possible date.</desc>
                 <datatype>
                   <dataRef name="string"/>
                 </datatype>
               </attDef>
               <attDef ident="cert">
-                <desc>Degree of certainty of this assertion</desc>
+                <desc>Degree of certainty of this assertion.</desc>
                 <valList type="closed">
                   <valItem ident="high">
-                    <desc>High degree of certainty</desc>
+                    <desc>High degree of certainty.</desc>
                   </valItem>
                   <valItem ident="middle">
-                    <desc>Middle degree of certainty</desc>
+                    <desc>Middle degree of certainty.</desc>
                   </valItem>
                   <valItem ident="low">
-                    <desc>Low degree of certainty</desc>
+                    <desc>Low degree of certainty.</desc>
                   </valItem>
                 </valList>
               </attDef>
             </attList>
           </elementSpec>
           <elementSpec ident="resp" module="KRXManifest">
-            <desc>Person responsible for some aspect of the work</desc>
+            <desc>Person responsible for some aspect of the work.</desc>
             <content>
               <textNode/>
             </content>
@@ -661,7 +661,7 @@
           </elementSpec>
 <!-- token definitions -->
         <moduleSpec ident="KRXToken">
-        <desc>A schema for Token files in the KanripoX project</desc>          
+        <desc>A schema for Token files in the KanripoX project.</desc>          
         </moduleSpec>
         <elementSpec ident="tList" module="KRXToken">
           <desc>Root for token that may contain one or more <gi>tg</gi> elements.</desc>
@@ -713,31 +713,31 @@
               </datatype>
             </attDef>          
             <attDef ident="n" usage="opt">
-              <desc>A label</desc>
+              <desc>A label.</desc>
               <datatype>
                 <dataRef key="string"/>
               </datatype>
             </attDef>
             <attDef ident="role" usage="opt">
-              <desc>Token group type</desc>
+              <desc>Token group type.</desc>
               <valList type="closed">
                 <valItem ident="h">
-                  <desc>Token group is a heading</desc>
+                  <desc>Token group is a heading.</desc>
                 </valItem>
                 <valItem ident="p">
-                  <desc>Token group is (part of) a paragraph</desc>
+                  <desc>Token group is (part of) a paragraph.</desc>
                 </valItem>
                 <valItem ident="s">
-                  <desc>Token group is a seg element</desc>
+                  <desc>Token group is a seg element.</desc>
                 </valItem>
                 <valItem ident="n">
-                  <desc>Token group is (part of) a note or annotation of any kind</desc>
+                  <desc>Token group is (part of) a note or annotation of any kind.</desc>
                 </valItem>
                 <valItem ident="q">
-                  <desc>Token group is (part of) a quotation</desc>
+                  <desc>Token group is (part of) a quotation.</desc>
                 </valItem>
                 <valItem ident="v">
-                  <desc>Token group is (part of) a verse line</desc>
+                  <desc>Token group is (part of) a verse line.</desc>
                 </valItem>
                 <valItem ident="o">
                   <desc>Token group is (part of) a textual feature not in this list.</desc>
@@ -770,25 +770,25 @@
           <content><textNode/></content>
           <attList>
             <attDef ident="role" usage="req">
-              <desc>Token type</desc>
+              <desc>Token type.</desc>
               <valList type="closed">
                 <valItem ident="h">
-                  <desc>Token is part of a heading</desc>
+                  <desc>Token is part of a heading.</desc>
                 </valItem>
                 <valItem ident="p">
-                  <desc>Token is part of a paragraph</desc>
+                  <desc>Token is part of a paragraph.</desc>
                 </valItem>
                 <valItem ident="s">
-                  <desc>Token is part of a seg element</desc>
+                  <desc>Token is part of a seg element.</desc>
                 </valItem>
                 <valItem ident="n">
-                  <desc>Token is part of a note or annotation of any kind</desc>
+                  <desc>Token is part of a note or annotation of any kind.</desc>
                 </valItem>
                 <valItem ident="q">
-                  <desc>Token is part of a quotation</desc>
+                  <desc>Token is part of a quotation.</desc>
                 </valItem>
                 <valItem ident="v">
-                  <desc>Token is part of a verse line</desc>
+                  <desc>Token is part of a verse line.</desc>
                 </valItem>
                 <valItem ident="o">
                   <desc>Token is part of a textual feature not in this list.</desc>
@@ -858,13 +858,13 @@
           </content>
           <attList>
             <attDef ident="ed">
-              <desc>Identifier of the edition to which this page belongs</desc>
+              <desc>Identifier of the edition to which this page belongs.</desc>
               <datatype>
                 <dataRef name="string"/>
               </datatype>
             </attDef>
             <attDef ident="n">
-              <desc>Number or other label used to refer to this page</desc>
+              <desc>Number or other label used to refer to this page.</desc>
               <datatype>
                 <dataRef name="string"/>
               </datatype>
@@ -883,13 +883,13 @@
           </content>
           <attList>
             <attDef ident="ed">
-              <desc>Identifier of the edition to which this line belongs</desc>
+              <desc>Identifier of the edition to which this line belongs.</desc>
               <datatype>
                 <dataRef name="string"/>
               </datatype>
             </attDef>
             <attDef ident="n">
-              <desc>Number or other label used to refer to this line</desc>
+              <desc>Number or other label used to refer to this line.</desc>
               <datatype>
                 <dataRef name="string"/>
               </datatype>
@@ -903,7 +903,7 @@
         </elementSpec>
 <!-- nexus definitions -->
         <moduleSpec ident="KRXNexus">
-        <desc>A schema for Token files in the KanripoX project</desc>
+        <desc>A schema for Token files in the KanripoX project.</desc>
         </moduleSpec>
         <elementSpec ident="nexusList" module="KRXNexus">
           <desc>Root for Nexus that may contain one or more <gi>nexus</gi> elements.</desc>
@@ -969,7 +969,7 @@
           <content><textNode/></content>
           <attList>
             <attDef ident="ed" usage="req">
-              <desc>Identifier of the edition (as used in the token file)</desc>
+              <desc>Identifier of the edition (as used in the token file).</desc>
               <datatype>
                 <dataRef name="string"/>
               </datatype>
@@ -988,7 +988,7 @@
               <defaultVal>1</defaultVal>
             </attDef>
             <attDef ident="target" usage="req">
-              <desc>Identifier of the first token in the text span</desc>
+              <desc>Identifier of the first token in the text span.</desc>
               <datatype>
                 <dataRef name="string"/>
               </datatype>
