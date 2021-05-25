@@ -4,7 +4,7 @@
   <teiHeader>
     <fileDesc>
       <titleStmt>
-        <title>Schema XML files in the KanripoX project</title>
+        <title>Schema for the KanripoX project</title>
       </titleStmt>
       <publicationStmt>
         <p>Available at https://github.com/kanripox/kanripox-dev</p>
@@ -96,7 +96,7 @@
       </div>
       <div>
         <head>A shadow of the text: the token file</head>
-        <p>The token files described here serve as a shadow of other digital files that more thoroughly describe the texts documented there. This relieves the token files from the burden to describe the physical appearence, structure and transmission of the text.  This information is available at any time by following the links back to these other files.  The purpose of the token files is to provide a minimal description, containing only the characters of the text in a form that allows easy comparison and alignment of multiple versions and a very minimal hierarchical structure if necessary.  The function is similar to a concordance in that it provides access to the whole text, but without much of what a reader would expect to make reading (or editing) convenient, or even feasible. On the other hand, enough information should be retained to reconstruct a very basic version of the text.</p>
+        <p>The token files described here serve as a shadow of other digital files that more thoroughly describe the texts documented there. This relieves the token files from the burden to describe the physical appearence, structure and transmission of the text.  This information is available at any time by following the links back to these other files.  The purpose of the token files is to provide a minimal description, containing only the characters of the text in a form that allows easy comparison and alignment of multiple versions and a very minimal hierarchical structure if necessary.  The role of this is similar to a concordance in that it provides access to the whole text, but without much of what a reader would expect to make reading (or editing) convenient, or even feasible. On the other hand, enough information should be retained to reconstruct a very basic version of the text.</p>
         <p>The main elements under the root element <gi>tList</gi>are::
           <specList>
             <specDesc key="tg"/>
@@ -165,7 +165,7 @@
       <div>
         <head>Links between text passages: the nexus file</head>
         <p>The nexus files described here describe links between locations in texts.  The links consist of references to a span of one or more consecutive characters in a text, machine readably expressed in terms of references to the <gi>t</gi> elements in the token files. Related links can be grouped together to form a nexus. This can be used for example to describe corresponding passages in different versions of a text.</p>
-        <p>The main elements under the root element <gi>nexusList</gi>are::
+        <p>The main elements under the root element <gi>nexusList</gi>are:
           <specList>
             <specDesc key="nexus"/>
             <specDesc key="note"/>
@@ -831,19 +831,19 @@
                 <dataRef name="nonNegativeInteger"/>
               </datatype>
             </attDef>
-            <attDef ident="position">
+            <attDef ident="position" usage="opt">
               <desc>position and content of marks out of line, but related to this token. The description is similar to CSS description on HTML @style: 'left:か;' would indicate a か syllable to the left of this token.</desc>
               <datatype>
                 <dataRef name="string"/>
               </datatype>
             </attDef>
-            <attDef ident="kundokuten">
+            <attDef ident="kundokuten" usage="opt">
               <desc>Kundoku marks related to this token. </desc>
               <datatype>
                 <dataRef name="string"/>
               </datatype>
             </attDef>
-            <attDef ident="ruby">
+            <attDef ident="ruby" usage="opt">
               <desc>Pronounciation marks related to this token. </desc>
               <datatype>
                 <dataRef name="string"/>
