@@ -8,6 +8,7 @@ from collections import defaultdict
 
 krx_xmlns="{http://kanripo.org/ns/KRX/1.0}"
 tx_xmlns="{http://kanripo.org/ns/KRX/1.0}"
+xml_xmlns="{http://www.w3.org/XML/1998/namespace}"
 
 # text type is defined on the parent of the edition element
 def get_text_type(textdir, textid):
@@ -210,7 +211,7 @@ def read_align_tabs(textdir):
         root = tree.getroot()
         textid = root.attrib['ed']
         for seg in root:
-            segid=seg.attrib['id']
+            segid=seg.attrib[f'{xml_xmlns}id']
             tp=seg.attrib['tp']
             tcount=seg.attrib['tcount']
             segs[segid].append((textid, segid, int(tp), int(tcount)))
