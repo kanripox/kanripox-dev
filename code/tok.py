@@ -19,36 +19,61 @@ astpua = '\U000F0000-\U000FFFFD\U00100000-\U0010FFFD'
 ##this will recognize image links like [[./img]] as 1 kanji --> clear this out later?!
 ent=r'\[\[.*?\]\]|\[[^\]]*\]|&[^;]*;|&amp;[CZ][X3-7]-[A-F0-9]+'
 #now
-kp_re = re.compile(u"(%s|[%s%s])" % (ent, kanji, pua))
-punc_re = re.compile(u"[\u3001-\u33FF\uFE00-\uFF7F]")
+kp_re = re.compile(u"(%s|[%s%s%s])" % (ent, kanji, astkanji, pua))
+punc_re = re.compile(u"[\u3001-\u33FF\uFE00-\uFF7F]+")
+start_re = re.compile(u"[〈《「『【〖〘〚]+")
 meta_re = re.compile(u'(<[^>]*>|\n#\+BEGIN_VERSE\n|\n#\+END_VERSE\n|\xb6|\n)')
 
 def line2arr(line):
-    line = re.sub("[\n\t ]+", "", line)
-    ex=kp_re.split("。"+line)
+    line = re.sub(u"[\n\t ]+", "", line)
+    ex=kp_re.split(u"。"+line)
     ex.insert(0,(''))
     cs=[a for a in zip(*[iter(ex)]*2)]
     seq=[]
     n=""
     for c in cs:
-        c1=[a for a in re.split(u'([〈《「『【〖〘〚]+)', c[1]) if len(a) > 0]
+        c1=[a for a in start_re.split( c[1]) if len(a) > 0]
         if len(c1) == 0:
-            co=""
+            co=u""
         else:
             co = c1[0]
-        seq.append((n, c[0], co))
+        seq.append([n, c[0], co])
         if len(c1) > 1:
             n=c1[1]
         else: 
-            n=""
+            n=u""
     return seq[1:]
 
+# p_content gets a dict with tags and content recursively
+# caller needs to pass in res
+# att are the attributes that get picked up
+def p_content(el, res, att=['n', '{http://www.w3.org/XML/1998/namespace}id']):
+    at={}
+    tn=el.tag.replace("{http://www.tei-c.org/ns/1.0}", "")
+    for a in el.attrib:
+        if a in att:
+            local=a.replace("{http://www.w3.org/XML/1998/namespace}", "")
+            at[local]=el.attrib[a]
+        at['start_name']=tn
+    if el.text:
+        res.append((el.text, at))
+    else:
+        res.append(('', at))
+    for e in el:
+        p_content(e, res)
+    if el.tail:
+        res.append((el.tail, {'end_name': tn}))
 
+
+# linechildren only gets the text within the element, including nested tags
 def linechildren(el):
     ret = ""
     if el.text:
         ret += el.text
-    t = el.tail.replace("\n", "")
+#    try:
+#        t = el.tail.replace("\n", "")
+#    except:
+#        t = ""
     for c in list(el):
         if c.text:
             ret += c.text
@@ -56,7 +81,10 @@ def linechildren(el):
             ret += linechildren(e)
         if c.tail:
             ret += c.tail
-    ret += el.tail
+    try:
+        ret += el.tail
+    except:
+        pass
     return ret
 
 def mandoku2tok(p, tmap):
@@ -111,8 +139,17 @@ def parse2tok(p, tmap, pel=False):
         ls = root.findall(f'.//{tei_xmlns}seg')
     if len(ls) == 0:
         ls = root.findall(f'.//{tei_xmlns}l')
+    if len(ls) == 0:
+        ls = root.findall(f'.//{tei_xmlns}p')
     tok=[]
     divs=[]
+    if ls[0].tag.endswith('p'):
+        tl=[]
+        for b in ls:
+            res=[]
+            p_content(b, res)
+            tl.append(res)
+        return tl, ["p"]
     for b in ls:
         p=parent_map[b]
         if pel:
@@ -138,6 +175,8 @@ def parse2tok(p, tmap, pel=False):
                 break
         #tag = b.tag.replace(f'{tei_xmlns}', '')
         tag=""
+        if "rend" in b.attrib:
+            tag = ";" + b.attrib["rend"]
         if f'{xml_xmlns}id' in b.attrib:
             id=b.attrib[f'{xml_xmlns}id']
         else:
@@ -188,14 +227,94 @@ def write_tok(tok, tok_base, step=10000, log=False):
                         tgid=""
                     else:
                         tgid=f' xml:id="{tok[j][1]}"'
-                    of.write(f'</tg><tg{tgid}><lb ed="{edid}" n="{tok[j][1]}"/>')
+                    of.write(f'</tg>\n<tg{tgid}>\n<lb ed="{edid}" n="{tok[j][1]}"/>\n')
             if t[1].startswith("noid"):
                 tn = "noid.%d" % (j)
             else:
                 tn = t[1]
-            of.write(f'<t tp="{j}" n="{tn}" role="{t[0]}" pos="{t[2]}"{p}{f}>{c}</t>')
+            of.write(f'<t tp="{j}" n="{tn}" role="{t[0]}" pos="{t[2]}"{p}{f}>{c}</t>\n')
         of.write("</tg></tList>\n")
         of.close()
+def process_ptok(tl):
+    tkl=[]
+    tp = 0
+    for p in tl:
+        try:
+            idx = p[0][1]['id']
+        except:
+            idx= None
+        if idx:
+            tkl.append('<tg xml:id="%s">' % (idx))
+            lbl=' n="%s"' % (idx)
+        else:
+            tkl.append('<tg>')
+            lbl=""
+        lp=0
+        tks=[]
+        for el in p:
+            try:
+                if el[1]['start_name']:
+                    lp = 0
+            except:
+                pass
+            try:
+                att= ' role="%s"' % (el[1]['n'])
+            except:
+                att= ' role="%s"' % ('d')
+            elt = el[0]
+            elt = re.sub("<.*=(.)>", "\\1", elt)
+            if punc_re.match(elt):
+                me=punc_re.match(elt)
+                st = elt[0:me.end()]
+                if not (start_re.match(st)):
+                    tks[-1][2] = tks[-1][2] + st
+            ex=line2arr(elt)
+            if start_re.match(elt):
+                me=start_re.match(elt)
+                st = elt[0:me.end()]
+                ex[0][0] = st + ex[0][0]
+            for e in ex:
+                lp += 1
+                e.append(lp)
+                e.append(tp)
+                e.append(att)
+                tp += 1
+                tks.append(e)
+        oldrole=''
+        for t in tks:
+            if len(t[0]) > 0:
+                pre = ' p="%s"' % (t[0])
+            else:
+                pre = ""
+            if len(t[2]) > 0 :
+                if not(start_re.match(t[2])):
+                    fol = ' f="%s"' % (t[2])
+                else:
+                    fol = ""
+            else:
+                fol = ""
+            tkl.append('<t%s%s%s%s tp="%d" pos="%d">%s</t>' % (lbl, pre, fol, t[5], t[4], t[3], t[1]) )
+            oldrole = t[5]
+        tkl.append('</tg>')
+    return tkl
+
+
+def write_ptok(tl, tok_base):
+    """tok is the list of tokens produced with p_content, tok_base the stub for the filename, including branch."""
+    fnbase=os.path.split(tok_base)[-1]
+    tkl=process_ptok(tl)
+    nf="%4.4d" % (0)
+    xid=f"{fnbase}-tok-{nf}"
+    edid=f"{fnbase}"
+    n=f"tok-{nf}"
+    ofn="%s-tok-0000.xml" % (tok_base)
+    of=open(ofn, mode="w", encoding="utf8")
+    of.write(f"""<?xml version="1.0" encoding="UTF-8"?>
+<tList xml:id="{xid}" ed="{edid}" n="{n}" xmlns="http://kanripo.org/ns/KRX/1.0">""")
+    of.write("\n".join(tkl))
+    of.write("</tList>\n")
+    of.close()
+
 
 def maketmap(tx, txt=True):
     nmap={}
@@ -224,22 +343,27 @@ def tokout(edid, loc, format, tmap, tok_base):
     elif format.startswith("xml"):
         xmlfile=[a for a in os.listdir(loc) if a.endswith("xml") and not ("_" in a)][0]
         toq, dv = parse2tok(f"{loc}/{xmlfile}", tmap, pel=True)
-    if len(toq) > 0:
+    if dv[0] == "p":
+        write_ptok(toq, tok_base)
+    elif len(toq) > 0:
         write_tok(toq, tok_base, step=-1)
         print(len(toq))
     return
 
 def make_toks():
     mtree=ET.parse("Manifest.xml")
+    cdir = os.path.abspath(".")
     if not os.path.exists("aux/tok"):
         os.makedirs("aux/tok", exist_ok=True)
 
     doc = mtree.findall(f'.//{krx_xmlns}edition')
     for d in doc:
         if d.attrib['language']=='lzh':
+            os.chdir(cdir)
             toq=[]
             edid=d.attrib['id']
             tok_base=os.path.abspath(f"aux/tok/{edid}")
+            #print (edid, tok_base)
             loc=f"{d.attrib['location']}"
             print(edid)
             if f"{krx_xmlns}tokenmap" in [a.tag for a in list(d)]:
