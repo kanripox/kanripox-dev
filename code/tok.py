@@ -127,6 +127,7 @@ def mandoku2tok(p, tmap):
     return tok
 # pel is the parent element. False means: do not include  2020-11-18: this is ignored for now
 # create a tok and a div structure as table of contents
+# 2022-09-21:  need explicit role:  root (default)= root text to be commented on,  or comm (set when applicaple)
 def parse2tok(p, tmap, pel=False):
     tree = ET.parse(p)
     cwd=os.getcwd()
@@ -151,6 +152,7 @@ def parse2tok(p, tmap, pel=False):
             tl.append(res)
         return tl, ["p"]
     for b in ls:
+        role="root"
         p=parent_map[b]
         if pel:
             px = p.tag.replace(f'{tei_xmlns}', '') + "/"
@@ -181,13 +183,16 @@ def parse2tok(p, tmap, pel=False):
             id=b.attrib[f'{xml_xmlns}id']
         else:
             id="noid"
+        if "type" in b.attrib:
+            role = b.attrib["type"]
         tx = linechildren(b)
         tx = tx.replace("\n", "")
         seq=line2arr(tx)
         cnt = 0
         for s in seq:
             cnt += 1
-            tok.append((px + tag, id, cnt, s))
+            # role is added last to avoid disturbances of the code reliying on positional identification
+            tok.append((px + tag, id, cnt, s, role))
     os.chdir(cwd)
     return (tok, divs)
 
@@ -232,7 +237,8 @@ def write_tok(tok, tok_base, step=10000, log=False):
                 tn = "noid.%d" % (j)
             else:
                 tn = t[1]
-            of.write(f'<t tp="{j}" n="{tn}" role="{t[0]}" pos="{t[2]}"{p}{f}>{c}</t>\n')
+            # 2022-09-21: for now, I only take the first letter of the t[4], to save some bits.
+            of.write(f'<t tp="{j}" n="{tn}" role="{t[4][0]}" pos="{t[2]}"{p}{f}>{c}</t>\n')
         of.write("</tg></tList>\n")
         of.close()
 def process_ptok(tl):
@@ -280,6 +286,7 @@ def process_ptok(tl):
                 e.append(att)
                 tp += 1
                 tks.append(e)
+        # 2022-09-21:  what is doing this?
         oldrole=''
         for t in tks:
             if len(t[0]) > 0:
@@ -340,10 +347,12 @@ def maketmap(tx, txt=True):
 def tokout(edid, loc, format, tmap, tok_base):
     if format.startswith("txt"):
         toq=mandoku2tok(loc, tmap)
+    elif loc.endswith(".xml"):
+        toq, dv = parse2tok(f"{loc}", tmap, pel=True)
     elif format.startswith("xml"):
         xmlfile=[a for a in os.listdir(loc) if a.endswith("xml") and not ("_" in a)][0]
         toq, dv = parse2tok(f"{loc}/{xmlfile}", tmap, pel=True)
-    if dv[0] == "p":
+    if len(dv) > 0 and dv[0] == "p":
         write_ptok(toq, tok_base)
     elif len(toq) > 0:
         write_tok(toq, tok_base, step=-1)
